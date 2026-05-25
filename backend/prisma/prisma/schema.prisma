@@ -11,3 +11,39 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Paciente{
+  id                Int      @id @default(autoincrement())
+  nome              String
+  dataNascimento    DateTime
+  telefone          String?
+  email             String?
+  cpf               String?
+  endereco          String?
+  profissao         String?
+  origem            String?
+  eventos           Evento[]
+  evolucoes         Evolucao[]
+}
+
+model Evento {
+  id              Int      @id @default(autoincrement())
+  paciente        Paciente @relation(fields: [pacienteId], references: [id])
+  pacienteId      Int
+  titulo          String
+  data            DateTime
+  horarioInicio   DateTime
+  horarioFim      DateTime
+}
+
+model Evolucao {
+  id              Int      @id @default(autoincrement())
+  paciente        Paciente @relation(fields: [pacienteId], references: [id])
+  pacienteId      Int
+  titulo          String
+  data            DateTime
+  horarioInicio   DateTime
+  horarioFim      DateTime
+  descricao       String
+
+}
