@@ -1,12 +1,14 @@
-import { IsEmail, IsOptional } from 'class-validator';
-import { EventoModel } from './evento.model';
-import { EvolucaoModel } from './evolucao.model';
+import { IsEmail, IsNumberString, IsOptional, Length } from 'class-validator';
+import { Evento } from './evento.model';
+import { Evolucao } from './evolucao.model';
 
-export class PacienteModel {
+export class Paciente {
     id: number;
     nome: string;
 
     @IsOptional()
+    @IsNumberString()
+    @Length(11,11)
     cpf?: string;
 
     @IsOptional()
@@ -22,9 +24,9 @@ export class PacienteModel {
     @IsOptional()
     endereco?: string;
 
-    eventos: EventoModel[];
+    eventos: Evento[];
 
-    evolucoes: EvolucaoModel[];
+    evolucoes: Evolucao[];
 
     constructor(id: number, nome: string, cpf?: string, dataNascimento?: Date, telefone?: string, email?: string, endereco?: string) {
         this.id = id;
@@ -38,3 +40,14 @@ export class PacienteModel {
         this.evolucoes = [];
     }
 }
+
+export type PacienteType = {
+    cpf: string | null;
+    dataNascimento: Date;
+    telefone: string | null;
+    email: string | null;
+    endereco: string | null;
+    id: number; nome: string;
+    profissao: string | null;
+    origem: string | null; 
+} | null;

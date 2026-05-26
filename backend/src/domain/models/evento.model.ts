@@ -1,4 +1,4 @@
-export class EventoModel {
+export class Evento {
     id: number;
     titulo: string;
     data: Date;

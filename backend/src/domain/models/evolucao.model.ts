@@ -1,4 +1,4 @@
-export class EvolucaoModel {
+export class Evolucao {
     id: number;
     titulo: string;
     data: Date;
