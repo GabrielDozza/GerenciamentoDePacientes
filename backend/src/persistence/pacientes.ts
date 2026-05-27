@@ -17,7 +17,7 @@ async function postPaciente(body: any) {
     const paciente = await prisma.paciente.create({
         data: {
             nome: body.nome,
-            dataNascimento: body.dataNascimento,
+            dataNascimento: new Date(body.dataNascimento),
             telefone: body.telefone,
             email: body.email,
             cpf: body.cpf,
@@ -33,6 +33,7 @@ async function postPaciente(body: any) {
 };
 
 async function patchPaciente(id: String, body: any) {
+    body.dataNascimento = new Date(body.dataNascimento);
     const paciente = await prisma.paciente.update({
         where: {
             id: Number(id)
