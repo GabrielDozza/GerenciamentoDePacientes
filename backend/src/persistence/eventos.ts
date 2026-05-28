@@ -10,11 +10,11 @@ async function getEventosPaciente(id: String) {
     return evento;
 };
 
-async function postEventoPaciente(body: any) {
+async function postEventoPaciente(id: String, body: any) {
     const evento = prisma.evento.create({
         data: {
             paciente: body.paciente,
-            pacienteId: body.pacienteId,
+            pacienteId: Number(id),
             titulo: body.titulo,
             data: body.data,
             horarioInicio: body.horarioInicio,

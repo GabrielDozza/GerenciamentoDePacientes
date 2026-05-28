@@ -47,7 +47,7 @@ async function patchPaciente(id: String, body: any) {
     return paciente;
 };
 
-async function deletePaciente(id: String) {
+async function deletePacienteId(id: String) {
     const paciente = await prisma.paciente.delete({
         where: {
             id: Number(id)
@@ -57,4 +57,4 @@ async function deletePaciente(id: String) {
     return paciente;
 };
 
-export { getPacientes, getPacientesId, postPaciente, patchPaciente, deletePaciente }
+export { getPacientes, getPacientesId, postPaciente, patchPaciente, deletePacienteId }

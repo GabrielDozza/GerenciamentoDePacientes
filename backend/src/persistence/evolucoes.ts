@@ -8,11 +8,11 @@ async function getEvolucoesPaciente(id: String) {
     return evolucoes;
 };
 
-async function postEvolucaoPaciente(body: any) {
+async function postEvolucaoPaciente(id:String, body: any) {
     const evolucao = prisma.evolucao.create({
         data: {
             paciente: body.paciente,
-            pacienteId: body.pacienteId,
+            pacienteId: Number(id),
             titulo: body.titulo,
             data: body.data,
             horarioInicio: body.horarioInicio,
