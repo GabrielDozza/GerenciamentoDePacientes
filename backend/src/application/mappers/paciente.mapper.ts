@@ -22,11 +22,11 @@ export class PacienteMapper {
         return {
             id: paciente.id,
             nome: paciente.nome,
-            cpf: paciente.cpf,
-            dataNascimento: paciente.dataNascimento,
-            telefone: paciente.telefone,
-            email: paciente.email,
-            endereco: paciente.endereco,
+            cpf: paciente?.cpf?? null,
+            dataNascimento: paciente?.dataNascimento?? null,
+            telefone: paciente?.telefone?? null,
+            email: paciente?.email?? null,
+            endereco: paciente?.endereco?? null,
             eventos: paciente.eventos,
             evolucoes: paciente.evolucoes
         };

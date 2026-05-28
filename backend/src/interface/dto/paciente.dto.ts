@@ -4,11 +4,11 @@ import { Evolucao } from "../../domain/models/evolucao.model";
 export interface CreatePacienteDTO{
     id: number;
     nome: string;
-    cpf?: string | undefined;
-    dataNascimento?: Date | undefined;
-    telefone?: string | undefined;
-    email?: string | undefined;
-    endereco?: string | undefined;
+    cpf?: string;
+    dataNascimento?: Date;
+    telefone?: string;
+    email?: string;
+    endereco?: string;
     eventos: Evento[]; // 
     evolucoes: Evolucao[];
 }
@@ -33,11 +33,11 @@ export interface UpdatePacienteEvolDTO{
 export interface PacienteResponseDTO{
     id: number;
     nome: string;
-    cpf?: string;
-    dataNascimento?: Date;
-    telefone?: string;
-    email?: string;
-    endereco?: string;
+    cpf: string | null;
+    dataNascimento: Date | null;
+    telefone: string | null;
+    email: string | null;
+    endereco: string | null;
     eventos: Evento[];
     evolucoes: Evolucao[];
 }

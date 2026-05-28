@@ -40,14 +40,3 @@ export class Paciente {
         this.evolucoes = [];
     }
 }
-
-export type PacienteType = {
-    cpf: string | null;
-    dataNascimento: Date;
-    telefone: string | null;
-    email: string | null;
-    endereco: string | null;
-    id: number; nome: string;
-    profissao: string | null;
-    origem: string | null; 
-} | null;
