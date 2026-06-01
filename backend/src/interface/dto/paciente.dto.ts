@@ -1,7 +1,7 @@
 import { Evento } from "../../domain/models/evento.model";
 import { Evolucao } from "../../domain/models/evolucao.model";
 
-export interface CreatePacienteDTO{
+export interface PacienteDTO{
     id: number;
     nome: string;
     cpf?: string;
@@ -9,7 +9,7 @@ export interface CreatePacienteDTO{
     telefone?: string;
     email?: string;
     endereco?: string;
-    eventos: Evento[]; // 
+    eventos: Evento[];
     evolucoes: Evolucao[];
 }
 
@@ -20,24 +20,4 @@ export interface UpdatePacienteDTO{
     telefone?: string;
     email?: string;
     endereco?: string;
-}
-
-export interface UpdatePacienteEvntDTO{
-    eventos: Evento[]; // eu uso model aqui para fazer update nos eventos do paciente??
-}
-
-export interface UpdatePacienteEvolDTO{
-    evolucoes: Evolucao[];
-}
-
-export interface PacienteResponseDTO{
-    id: number;
-    nome: string;
-    cpf: string | null;
-    dataNascimento: Date | null;
-    telefone: string | null;
-    email: string | null;
-    endereco: string | null;
-    eventos: Evento[];
-    evolucoes: Evolucao[];
 }

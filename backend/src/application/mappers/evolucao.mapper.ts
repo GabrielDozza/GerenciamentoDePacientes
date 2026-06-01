@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { Evolucao } from "../../domain/models/evolucao.model";
-import { CreateEvolucaoDTO, EvolucaoResponseDTO } from "../../interface/dto/evolucao.dto";
+import { EvolucaoDTO } from "../../interface/dto/evolucao.dto";
 
 
 @Injectable()
 export class EvolucaoMapper {
-    public toDomain = async (evolucaoDTO: CreateEvolucaoDTO) : Promise<Evolucao> => {
+    public toDomain = async (evolucaoDTO: EvolucaoDTO) : Promise<Evolucao> => {
         const evolucao = new Evolucao(
             evolucaoDTO.id,
             evolucaoDTO.titulo,
@@ -17,8 +17,9 @@ export class EvolucaoMapper {
         return evolucao;
     }
 
-    public toDTO = (evolucao: Evolucao) : EvolucaoResponseDTO => {
+    public toDTO = (evolucao: Evolucao) : EvolucaoDTO => {
         return {
+            id: evolucao.id,
             titulo: evolucao.titulo,
             data: evolucao.data,
             horarioInicio: evolucao.horarioInicio,

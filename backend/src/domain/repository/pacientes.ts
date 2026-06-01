@@ -1,10 +1,10 @@
-import { CreatePacienteDTO, PacienteResponseDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
 import { Paciente } from "../models/paciente.model";
 
 export interface IPacienteRepository{
-    getPacientes() : Promise<PacienteResponseDTO[]>;
-    getPacientesId(id: String) : Promise<PacienteResponseDTO | null>;
-    postPaciente(body: any) : Promise<CreatePacienteDTO>;
-    patchPaciente(id: String, body: any) : Promise<PacienteResponseDTO | null>;
-    deletePaciente(id: String) : Promise<PacienteResponseDTO | null>;
+    getPacientes() : Promise<PacienteDTO[]>;
+    getPacientesId(id: String) : Promise<PacienteDTO | null>;
+    postPaciente(body: any) : Promise<PacienteDTO>;
+    //patchPaciente(id: String, body: any) : Promise<PacienteDTO | null>;
+    //deletePaciente(id: String) : Promise<PacienteDTO | null>;
 }

@@ -3,7 +3,7 @@ import { getPacientes, getPacientesId, patchPaciente, postPaciente } from "../..
 import verificaDadosBody from "../middlewares/pacientes";
 
 @Controller("pacientes")
-export class pacientesController {
+export class PacientesController {
 
     // GETS
     @Get()

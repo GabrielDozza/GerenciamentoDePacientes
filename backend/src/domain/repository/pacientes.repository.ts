@@ -3,7 +3,9 @@ import prisma from "../../../prisma/prisma"
 import type { Paciente } from "../models/paciente.model";
 import { IPacienteRepository } from "./pacientes";
 import { PacienteMapper } from "../../application/mappers/paciente.mapper";
-import { CreatePacienteDTO, PacienteResponseDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { getPacientes, getPacientesId } from "../../persistence/pacientes";
+import { get } from "http";
 
 @Injectable()
 export class PacienteRepository implements IPacienteRepository{
@@ -11,23 +13,11 @@ export class PacienteRepository implements IPacienteRepository{
         private readonly pacienteMapper : PacienteMapper 
     ){};
 
-    public async getPacientes() : Promise<PacienteResponseDTO[]>{
-        const pacientes = await prisma.paciente.findMany({
-            select: {
-                id: true,
-                nome: true,
-                cpf: true,
-                dataNascimento: true,
-                telefone: true,
-                email: true,
-                endereco: true,
-                eventos: true,
-                evolucoes: true
-            }
-        });
-        let pArray: PacienteResponseDTO[] = [];
+    public async getPacientes() : Promise<PacienteDTO[]>{
+        const pacientes = await getPacientes();
+        let pArray: PacienteDTO[] = [];
         for (const p of pacientes) {
-            const pDTO : CreatePacienteDTO = {
+            const pDTO : PacienteDTO = {
                 id: p.id,
                 nome: p.nome,
                 cpf: p?.cpf?? undefined,
@@ -35,35 +25,21 @@ export class PacienteRepository implements IPacienteRepository{
                 telefone: p?.telefone?? undefined,
                 email: p?.email?? undefined,
                 endereco: p?.endereco?? undefined,
-                eventos: p.eventos,
-                evolucoes: p.evolucoes
+                eventos: [],
+                evolucoes: []
             }
-            const pacienteDomain = await this.pacienteMapper.toDomain(pDTO);
-            const pacienteResponse = this.pacienteMapper.toDTO(pacienteDomain);
+            const pacienteResponse = this.pacienteMapper.toDTO(pDTO);
             pArray.push(pacienteResponse);
         }
         return pArray;
     };
 
-    public async getPacientesId(id: String) : Promise<PacienteResponseDTO | null> {
-        const paciente = await prisma.paciente.findFirst({
-            where: { id: Number(id) },
-            select: {
-                id: true,
-                nome: true,
-                cpf: true,
-                dataNascimento: true,
-                telefone: true,
-                email: true,
-                endereco: true,
-                eventos: true,
-                evolucoes: true
-            }
-        });
+    public async getPacientesId(id: String) : Promise<PacienteDTO | null> {
+        const paciente = await getPacientesId(id);
         if (!paciente) {
             return null;
         }
-        const pacienteDTO : CreatePacienteDTO = {
+        const pacienteDTO : PacienteDTO = {
             id: paciente.id,
             nome: paciente.nome,
             cpf: paciente?.cpf?? undefined,
@@ -71,20 +47,17 @@ export class PacienteRepository implements IPacienteRepository{
             telefone: paciente?.telefone?? undefined,
             email: paciente?.email?? undefined,
             endereco: paciente?.endereco?? undefined,
-            eventos: paciente.eventos,
-            evolucoes: paciente.evolucoes
+            eventos: [],
+            evolucoes: []
         }
-        const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
-        const pacienteResponse = this.pacienteMapper.toDTO(pacienteDomain);               
-        
-        return pacienteResponse;
+        return pacienteDTO;
     };
 
-    public async postPaciente(body: any) : Promise<Paciente>{
+    public async postPaciente(body: any) : Promise<PacienteDTO>{
         const paciente = await prisma.paciente.create({
             data: {
                 nome: body.nome,
-                dataNascimento: body.dataNascimento,
+                dataNascimento: new Date(body.dataNascimento),
                 telefone: body.telefone,
                 email: body.email,
                 cpf: body.cpf,
@@ -95,7 +68,7 @@ export class PacienteRepository implements IPacienteRepository{
                 evolucoes: body.evolucoes
             }
         });
-        const pacienteDTO : CreatePacienteDTO = {
+        const pacienteDTO : PacienteDTO = {
             id: paciente.id,
             nome: paciente.nome,
             cpf: paciente?.cpf?? undefined,
@@ -109,8 +82,8 @@ export class PacienteRepository implements IPacienteRepository{
         const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
         return pacienteDomain;
     };
-
-    public async patchPaciente(id: String, body: any) : Promise<PacienteResponseDTO | null>{
+/*
+    public async patchPaciente(id: String, body: any) : Promise<PacienteDTO | null>{
         const paciente = await prisma.paciente.update({
             where: {
                 id: Number(id)
@@ -119,6 +92,8 @@ export class PacienteRepository implements IPacienteRepository{
             data: {
                 ...body
             }
+
+            
         });
 
         return paciente;
@@ -134,5 +109,5 @@ export class PacienteRepository implements IPacienteRepository{
         return paciente;
     };
 
-
+*/
 }

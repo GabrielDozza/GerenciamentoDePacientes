@@ -1,7 +1,19 @@
 import prisma from "../../prisma/prisma.js";
 
 async function getPacientes() {
-    const pacientes = await prisma.paciente.findMany({});
+    const pacientes = await prisma.paciente.findMany({
+            select: {
+                id: true,
+                nome: true,
+                cpf: true,
+                dataNascimento: true,
+                telefone: true,
+                email: true,
+                endereco: true,
+                eventos: true,
+                evolucoes: true
+            }
+        });
     return pacientes;
 };
 
