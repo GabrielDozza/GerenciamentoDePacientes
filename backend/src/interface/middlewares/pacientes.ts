@@ -1,4 +1,4 @@
-import { ForbiddenException } from "@nestjs/common"
+import { BadRequestException, ForbiddenException } from "@nestjs/common"
 
 function verificaDadosPostBody(body: any) {
     if (body.nome == undefined) { throw new ForbiddenException({ Message: "Digite um nome" }) };
@@ -38,11 +38,15 @@ function verificaDadosPathBody(body: any) {
 };
 
 function verificaIdReceibo(id: String) {
-    if(isNaN(Number(id))) {throw new ForbiddenException({message: "Id não fornecido"})}
+    if(isNaN(Number(id))) {throw new BadRequestException({message: "Id deve ser um numero inteiro"})}
 };
 
 function trataErrosPostPaciente(erro) {
     if(erro.code == "P2002") {return {message: "Cpf já cadastrado!"}};
 };
 
-export {verificaDadosPostBody, verificaDadosPathBody, verificaIdReceibo, trataErrosPostPaciente};
+function trataErrosPatchPaciente(erro) {
+    if(erro.code == "P2002") {return {message: "Cpf já cadastrado!"}};
+};
+
+export {verificaDadosPostBody, verificaDadosPathBody, verificaIdReceibo, trataErrosPostPaciente, trataErrosPatchPaciente};

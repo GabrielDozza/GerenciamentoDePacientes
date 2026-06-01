@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { deletePacienteId, getPacientes, getPacientesId, patchPaciente, postPaciente } from "../../persistence/pacientes";
-import { trataErrosPostPaciente, verificaDadosPathBody, verificaDadosPostBody, verificaIdReceibo } from "../middlewares/pacientes";
+import { trataErrosPatchPaciente, trataErrosPostPaciente, verificaDadosPathBody, verificaDadosPostBody, verificaIdReceibo } from "../middlewares/pacientes";
 import { getEventosPaciente, postEventoPaciente } from "../../persistence/eventos";
 import { getEvolucoesPaciente, postEvolucaoPaciente } from "../../persistence/evolucoes";
-import e from "express";
 
 @Controller("pacientes")
 export class pacientesController {
@@ -30,17 +29,21 @@ export class pacientesController {
 
             const paciente = await postPaciente(body);
             return paciente;
-        } catch(erro) {
+        } catch (erro) {
             return trataErrosPostPaciente(erro);
         };
     };
 
     @Patch(":id")
     async patchPaciente(@Param("id") idRecebido: String, @Body() body: any) {
-        verificaDadosPathBody(body);
+        try {
+            verificaDadosPathBody(body);
 
-        const paciente = await patchPaciente(idRecebido, body);
-        return paciente;
+            const paciente = await patchPaciente(idRecebido, body);
+            return paciente;
+        } catch (erro) {
+            return trataErrosPatchPaciente(erro);
+        };
     };
 
     @Delete(":id")
@@ -71,12 +74,16 @@ export class pacientesController {
     // PACIENTE EVOLUCOES
     @Get(":id/evolucoes")
     async getEvolucoesPaciente(@Param("id") idRecebido: String) {
+        verificaIdReceibo(idRecebido);
+
         const evolucoes = await getEvolucoesPaciente(idRecebido);
         return evolucoes;
     };
 
     @Post(":id/evolucoes")
     async postEvolucaoPaciente(@Param("id") idRecebido: String, @Body() body: any) {
+        verificaIdReceibo(idRecebido);
+        
         const evolucao = await postEvolucaoPaciente(idRecebido, body);
         return evolucao;
     };
