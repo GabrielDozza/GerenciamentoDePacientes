@@ -37,4 +37,18 @@ async function deleteProfissional(idRecebido: String) {
     return profissional;
 };
 
-export { getProfissionais, postProfissional, patchProfissional, deleteProfissional };
+async function getProfissionalId(idRecebido: String) {
+    const profissional = prisma.profissional.findFirst({
+        where: {id: Number(idRecebido)}
+    });
+    return profissional;
+};
+
+async function getProfissionalLogin(emailRecebido: string, senhaRecebida: string) {
+    const profissional = prisma.profissional.findFirst({
+        where: {email: emailRecebido, senha: senhaRecebida}
+    });
+    return profissional;
+};
+
+export { getProfissionais, postProfissional, patchProfissional, deleteProfissional, getProfissionalId, getProfissionalLogin };

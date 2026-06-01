@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 function gerarToken(body: any) {
     const payload = {
-        id: body.id,
         nome: body.nome,
         email: body.email
     };

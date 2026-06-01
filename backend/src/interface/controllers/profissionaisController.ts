@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
-import { deleteProfissional, getProfissionais, patchProfissional, postProfissional } from "../../persistence/profissionais";
+import { deleteProfissional, getProfissionais, getProfissionalId, patchProfissional, postProfissional } from "../../persistence/profissionais";
 import {verificaDadosPostProfissionais, verificaDadosPatchProfissionais, verificaIdReceibo} from "../middlewares/profissionais";
+import gerarSenhaHash from "../middlewares/hashPassword";
 
 @Controller("profissionais")
-export class proffionaisController {
+export class profissionaisController {
     // profissionais
     @Get()
     async getProfissionais() {
@@ -11,16 +12,23 @@ export class proffionaisController {
         return profissionais;
     };
 
+    @Get(":id")
+    async getProfissionalId(@Param("id") idRecebido: String) {
+        const profissional = getProfissionalId(idRecebido);
+        return profissional;
+    };
+
     @Post()
     async postProfissional(@Body() body: any) {
         verificaDadosPostProfissionais(body);
+        body.senha = gerarSenhaHash(body.senha);
 
         const profissional = postProfissional(body);
         return profissional;
     };
 
-    @Patch()
-    async patchProfissional(@Param() idRecebido: String, @Body() body: any) {
+    @Patch(":id")
+    async patchProfissional(@Param("id") idRecebido: String, @Body() body: any) {
         verificaIdReceibo(idRecebido);
         verificaDadosPatchProfissionais(body);
 
@@ -28,8 +36,8 @@ export class proffionaisController {
         return profissional;
     }
 
-    @Delete()
-    async deleteProfissional(@Param() idRecebido: string) {
+    @Delete(":id")
+    async deleteProfissional(@Param("id") idRecebido: string) {
         verificaIdReceibo(idRecebido);
 
         const profissional = deleteProfissional(idRecebido);
