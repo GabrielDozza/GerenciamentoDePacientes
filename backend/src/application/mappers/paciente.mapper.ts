@@ -5,7 +5,7 @@ import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto
 
 @Injectable()
 export class PacienteMapper {
-    public toDomain = async (pacienteDTO: PacienteDTO) : Promise<Paciente> => {
+    public toDomain = async (pacienteDTO: PacienteDTO | any) : Promise<Paciente> => {
         const paciente = new Paciente(
             pacienteDTO.id,
             pacienteDTO.nome,
@@ -13,7 +13,9 @@ export class PacienteMapper {
             pacienteDTO?.dataNascimento,
             pacienteDTO?.telefone,
             pacienteDTO?.email,
-            pacienteDTO?.endereco
+            pacienteDTO?.endereco,
+            pacienteDTO?.profissao,
+            pacienteDTO?.origem
         );
         return paciente;
     }
@@ -28,6 +30,8 @@ export class PacienteMapper {
             telefone: paciente?.telefone?? undefined,
             email: paciente?.email?? undefined,
             endereco: paciente?.endereco?? undefined,
+            profissao: paciente?.profissao?? undefined,
+            origem: paciente?.origem?? undefined,
             eventos: paciente.eventos,
             evolucoes: paciente.evolucoes
         };
@@ -40,6 +44,8 @@ export class PacienteMapper {
         if (updatePacienteDTO.telefone) paciente.telefone = updatePacienteDTO.telefone;
         if (updatePacienteDTO.email) paciente.email = updatePacienteDTO.email;
         if (updatePacienteDTO.endereco) paciente.endereco = updatePacienteDTO.endereco;
+        if (updatePacienteDTO.profissao) paciente.profissao = updatePacienteDTO.profissao;
+        if (updatePacienteDTO.origem) paciente.origem = updatePacienteDTO.origem;
         
         return paciente;
     }

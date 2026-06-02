@@ -2,6 +2,7 @@ import { Delete, Inject, Injectable } from "@nestjs/common";
 import { PacienteMapper } from "../mappers/paciente.mapper";
 import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
 import { PacienteRepository } from "../../domain/repository/pacientes.repository";
+import { Paciente } from "../../domain/models/paciente.model";
 
 
 @Injectable()
@@ -21,7 +22,7 @@ export class PacienteService {
         return paciente;
     }
     
-    async create(pacienteDTO : PacienteDTO){
+    async create(pacienteDTO : PacienteDTO) : Promise<Paciente>{
         const paciente = await this.pacienteMapper.toDomain(pacienteDTO);
         return await this.pacienteRepository.postPaciente(paciente);
     }

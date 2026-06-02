@@ -1,4 +1,6 @@
-import prisma from "../../prisma/prisma.js";
+import { Paciente } from "@prisma/client";
+import { PacienteDTO } from "../interface/dto/paciente.dto";
+import prisma from "../../prisma/prisma";
 
 async function getPacientes() {
     const pacientes = await prisma.paciente.findMany({
@@ -25,19 +27,17 @@ async function getPacientesId(id: String) {
     return paciente;
 };
 
-async function postPaciente(body: any) {
-    const paciente = await prisma.paciente.create({
+async function postPaciente(paciente: Paciente) {
+    const novoPaciente = await prisma.paciente.create({
         data: {
-            nome: body.nome,
-            dataNascimento: new Date(body.dataNascimento),
-            telefone: body.telefone,
-            email: body.email,
-            cpf: body.cpf,
-            endereco: body.endereco,
-            profissao: body.profissao,
-            origem: body.origem,
-            eventos: body.eventos,
-            evolucoes: body.evolucoes
+            nome: paciente.nome,
+            dataNascimento: paciente.dataNascimento ?? new Date(),
+            telefone: paciente.telefone,
+            email: paciente.email,
+            cpf: paciente.cpf,
+            endereco: paciente.endereco,
+            profissao: paciente.profissao,
+            origem: paciente.origem
         }
     })
 

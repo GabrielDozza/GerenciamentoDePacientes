@@ -4,8 +4,8 @@ import type { Paciente } from "../models/paciente.model";
 import { IPacienteRepository } from "./pacientes";
 import { PacienteMapper } from "../../application/mappers/paciente.mapper";
 import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
-import { getPacientes, getPacientesId } from "../../persistence/pacientes";
-import { get } from "http";
+import { getPacientes, getPacientesId, postPaciente } from "../../persistence/pacientes";
+
 
 @Injectable()
 export class PacienteRepository implements IPacienteRepository{
@@ -53,33 +53,22 @@ export class PacienteRepository implements IPacienteRepository{
         return pacienteDTO;
     };
 
-    public async postPaciente(body: any) : Promise<PacienteDTO>{
-        const paciente = await prisma.paciente.create({
-            data: {
-                nome: body.nome,
-                dataNascimento: new Date(body.dataNascimento),
-                telefone: body.telefone,
-                email: body.email,
-                cpf: body.cpf,
-                endereco: body.endereco,
-                //profissao: body.profissao,
-                //origem: body.origem,
-                eventos: body.eventos,
-                evolucoes: body.evolucoes
-            }
-        });
-        const pacienteDTO : PacienteDTO = {
-            id: paciente.id,
-            nome: paciente.nome,
-            cpf: paciente?.cpf?? undefined,
-            dataNascimento: paciente?.dataNascimento?? undefined,
-            telefone: paciente?.telefone?? undefined,
-            email: paciente?.email?? undefined,
-            endereco: paciente?.endereco?? undefined,
+    public async postPaciente(body: any) : Promise<Paciente>{
+        const pacienteDomain : Paciente = {
+            id: body.id,
+            nome: body.nome,
+            cpf: body?.cpf?? undefined,
+            dataNascimento: body?.dataNascimento?? undefined,
+            telefone: body?.telefone?? undefined,
+            email: body ?.email?? undefined,
+            endereco: body?.endereco?? undefined,
+            profissao: body?.profissao?? undefined,
+            origem: body?.origem?? undefined,
             eventos: [],
             evolucoes: []
         }   
-        const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
+        const p = await postPaciente(pacienteDomain);
+        
         return pacienteDomain;
     };
 /*

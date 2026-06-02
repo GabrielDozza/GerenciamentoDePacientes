@@ -9,6 +9,8 @@ export interface PacienteDTO{
     telefone?: string;
     email?: string;
     endereco?: string;
+    profissao?: string;
+    origem?: string;
     eventos: Evento[];
     evolucoes: Evolucao[];
 }
@@ -20,4 +22,6 @@ export interface UpdatePacienteDTO{
     telefone?: string;
     email?: string;
     endereco?: string;
+    profissao?: string;
+    origem?: string;
 }
