@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-function gerarToken(body: any) {
+function geraradorToken(body: any) {
     const payload = {
         id: body.id,
         nome: body.nome,
@@ -13,11 +13,15 @@ function gerarToken(body: any) {
     return token;
 };
 
-function verificaToken(token: any) {
-    const key = process.env.JWT_TOKEN as string;
-    const payload = jwt.verify(token, key) as any;
+function verificadorToken(token: any) {
+    try {
+        const key = process.env.JWT_TOKEN as string;
+        const payload = jwt.verify(token, key) as any;
 
-    return payload;
+        return payload;
+    } catch(erro: any) {
+        return erro.message;
+    };
 };
 
-export { gerarToken, verificaToken };
+export { geraradorToken, verificadorToken };

@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, Param, Patch, Post } from "@nestjs/common";
 import { deletePacienteId, getPacientes, getPacientesId, patchPaciente, postPaciente } from "../../persistence/pacientes";
 import { trataErrosPatchPaciente, trataErrosPostPaciente, verificaDadosPathBody, verificaDadosPostBody, verificaIdReceibo } from "../middlewares/pacientes";
 import { getEventosPaciente, postEventoPaciente } from "../../persistence/eventos";
 import { getEvolucoesPaciente, postEvolucaoPaciente } from "../../persistence/evolucoes";
+import { verificadorToken } from "../middlewares/tokenJwt";
 
 @Controller("pacientes")
 export class pacientesController {
@@ -15,8 +16,9 @@ export class pacientesController {
     };
 
     @Get(":id")
-    async getPacientesId(@Param("id") idRecebido: String) {
+    async getPacientesId(@Param("id") idRecebido: String, @Headers("Authorization") token: String) {
         verificaIdReceibo(idRecebido);
+        verificadorToken(token);
 
         const paciente = await getPacientesId(idRecebido);
         return paciente;
