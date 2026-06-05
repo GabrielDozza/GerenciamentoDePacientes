@@ -8,6 +8,7 @@ export class EventoMapper {
     public toDomain = async (eventoDTO: EventoDTO) : Promise<Evento> => {
         const evento = new Evento(
             eventoDTO.id,
+            eventoDTO.pacienteId,
             eventoDTO.titulo,
             eventoDTO.data,
             eventoDTO.horarioInicio,
@@ -16,9 +17,10 @@ export class EventoMapper {
         return evento;
     }
 
-    public toDTO = (evento: Evento) : EventoDTO => {
+    public toDTO = (evento: Evento | any) : EventoDTO => {
         return {
             id: evento.id,
+            pacienteId: evento.pacienteId,
             titulo: evento.titulo,
             data: evento.data,
             horarioInicio: evento.horarioInicio,

@@ -17,6 +17,8 @@ export class PacienteRepository implements IPacienteRepository{
         const pacientes = await getPacientes();
         let pArray: PacienteDTO[] = [];
         for (const p of pacientes) {
+            const pDTO : PacienteDTO = this.pacienteMapper.toDTO(p);
+            /*
             const pDTO : PacienteDTO = {
                 id: p.id,
                 nome: p.nome,
@@ -28,8 +30,9 @@ export class PacienteRepository implements IPacienteRepository{
                 eventos: [],
                 evolucoes: []
             }
-            const pacienteResponse = this.pacienteMapper.toDTO(pDTO);
-            pArray.push(pacienteResponse);
+                */
+            //const pacienteResponse = this.pacienteMapper.toDTO(pDTO);
+            pArray.push(pDTO);
         }
         return pArray;
     };
@@ -39,6 +42,8 @@ export class PacienteRepository implements IPacienteRepository{
         if (!paciente) {
             return null;
         }
+        const pacienteDTO : PacienteDTO = this.pacienteMapper.toDTO(paciente);
+        /*
         const pacienteDTO : PacienteDTO = {
             id: paciente.id,
             nome: paciente.nome,
@@ -50,10 +55,13 @@ export class PacienteRepository implements IPacienteRepository{
             eventos: [],
             evolucoes: []
         }
+            */
         return pacienteDTO;
     };
 
     public async postPaciente(body: any) : Promise<Paciente>{
+        const pacienteDomain = this.toDomain(body);
+        /*
         const pacienteDomain : Paciente = {
             id: body.id,
             nome: body.nome,
@@ -66,28 +74,30 @@ export class PacienteRepository implements IPacienteRepository{
             origem: body?.origem?? undefined,
             eventos: [],
             evolucoes: []
-        }   
-        const p = await postPaciente(pacienteDomain);
-        
+        }
+            */   
+        await postPaciente(pacienteDomain);
         return pacienteDomain;
     };
-/*
-    public async patchPaciente(id: String, body: any) : Promise<PacienteDTO | null>{
-        const paciente = await prisma.paciente.update({
-            where: {
-                id: Number(id)
-            },
 
-            data: {
-                ...body
-            }
+    public async patchPaciente(id: String, body: any) : Promise<Paciente | null>{
+        const paciente = getPacientesId(id);
+        if (paciente == null){
+            return null;
+        }
+        const pacienteDomain = await this.toDomain(paciente);
+        const update = this.pacienteMapper.toUpdateDTO(body);
+        const updatePacienteDomain = this.pacienteMapper.updateDomain(pacienteDomain, update)
 
-            
-        });
-
-        return paciente;
+        return updatePacienteDomain;
     };
 
+    private async toDomain(body : any) : Promise<Paciente>{
+        const pacienteDTO = this.pacienteMapper.toDTO(body);
+        const pacienteDomain = this.pacienteMapper.toDomain(pacienteDTO);
+        return pacienteDomain;
+    }
+/*
     public async deletePaciente(id: String) : Promise<Paciente>{
         const paciente = await prisma.paciente.delete({
             where: {

@@ -24,4 +24,6 @@ export interface UpdatePacienteDTO{
     endereco?: string;
     profissao?: string;
     origem?: string;
+    eventos?: Evento[];
+    evolucoes?: Evolucao[];
 }

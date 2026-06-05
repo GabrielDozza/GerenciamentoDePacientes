@@ -12,13 +12,13 @@ export class PacientesController {
     // GETS
     @Get()
     async getPacientes() {
-        const pacientes = await getPacientes();
+        const pacientes = await this.pacienteService.getAll();
         return pacientes;
     };
 
     @Get(":id")
     async getPacientesId(@Param("id") idRecebido: String) {
-        const paciente = await getPacientesId(idRecebido);
+        const paciente = await this.pacienteService.getById(idRecebido);
         return paciente;
     };
 
@@ -31,10 +31,13 @@ export class PacientesController {
     };
 
     @Patch(":id")
-    async patchPaciente(@Param("id") idRecebido: String, @Body() body: UpdatePacienteDTO) {
+    async patchPaciente(@Param("id") idRecebido: String, @Body() update: UpdatePacienteDTO) {
         console.log(idRecebido);
-
-        const paciente = await patchPaciente(idRecebido, body);
+        const updatePaciente = await this.pacienteService.patch(idRecebido, update)
+        if (updatePaciente == null){
+            return null;
+        }
+        const paciente = await patchPaciente(updatePaciente);
         return paciente;
     };
 };

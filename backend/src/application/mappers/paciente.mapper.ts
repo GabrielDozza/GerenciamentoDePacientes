@@ -1,11 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { Paciente } from "../../domain/models/paciente.model";
 import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { Evento } from "../../domain/models/evento.model";
+import { Evolucao } from "../../domain/models/evolucao.model";
 
 
 @Injectable()
 export class PacienteMapper {
-    public toDomain = async (pacienteDTO: PacienteDTO | any) : Promise<Paciente> => {
+    public toDomain = async (pacienteDTO: PacienteDTO/* | any*/) : Promise<Paciente> => {
         const paciente = new Paciente(
             pacienteDTO.id,
             pacienteDTO.nome,
@@ -21,7 +23,7 @@ export class PacienteMapper {
     }
 
 
-    public toDTO = (paciente: Paciente) : PacienteDTO => {
+    public toDTO = (paciente: Paciente | any) : PacienteDTO => {
         return {
             id: paciente.id,
             nome: paciente.nome,
@@ -35,6 +37,17 @@ export class PacienteMapper {
             eventos: paciente.eventos,
             evolucoes: paciente.evolucoes
         };
+    }
+
+    public toUpdateDTO = (paciente : any) : UpdatePacienteDTO => {
+        return {
+            cpf: paciente?.cpf?? undefined,
+            telefone: paciente?.telefone?? undefined,
+            email: paciente?.email?? undefined,
+            endereco: paciente?.endereco?? undefined,
+            profissao: paciente?.profissao?? undefined,
+            origem: paciente?.origem?? undefined,
+        }
     }
 
     public updateDomain = async (paciente: Paciente, updatePacienteDTO: UpdatePacienteDTO) : Promise<Paciente> => {

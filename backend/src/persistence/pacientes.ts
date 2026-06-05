@@ -1,5 +1,5 @@
 import { Paciente } from "@prisma/client";
-import { PacienteDTO } from "../interface/dto/paciente.dto";
+import { PacienteDTO, UpdatePacienteDTO } from "../interface/dto/paciente.dto";
 import prisma from "../../prisma/prisma";
 
 async function getPacientes() {
@@ -41,22 +41,28 @@ async function postPaciente(paciente: Paciente) {
         }
     })
 
-    return paciente
+    return novoPaciente;
 };
 
-async function patchPaciente(id: String, body: any) {
-    body.dataNascimento = new Date(body.dataNascimento);
-    const paciente = await prisma.paciente.update({
+async function patchPaciente(paciente: Paciente) {
+    const updatePaciente = await prisma.paciente.update({
         where: {
-            id: Number(id)
+            id: Number(paciente.id)
         },
 
         data: {
-            ...body
+            telefone: paciente?.telefone,
+            email: paciente?.email,
+            cpf: paciente?.cpf,
+            endereco: paciente?.endereco,
+            profissao: paciente?.profissao,
+            origem: paciente?.origem,
+            eventos: paciente?.eventos,
+            evolucoes: paciente?.evolucoes
         }
     });
 
-    return paciente;
+    return updatePaciente;
 };
 
 async function deletePaciente(id: String) {
