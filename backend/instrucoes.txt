@@ -1,0 +1,144 @@
+
+// DICAS
+// DATAS PRECISAM USAR O PADRÃO INTERNACIONAL NO BACKEND
+// ENTÃO NOSSO DIA/MES/ANO VIRA ANO/MES/DIA
+// DIA E MES DEVEM CONTER 2 DIGITOS E ANO DEVE CONTER 4
+// EXEMPLO 5 -> 05 & 26 -> 2026
+
+
+// =================================================================
+// 1. AUTENTICAÇÃO
+// =================================================================
+
+// Rota: POST "/auth/login"
+// Descrição: Realiza o login do profissional e retorna o token JWT.
+// Body:
+{
+  "email": "admin123@gmail.com",
+  "senha": "admin123"
+}
+
+// Rota: POST "/auth/token"
+// Headers: Authorization: "token"
+// Descrição: Valida se o token JWT atual ainda é válido.
+
+
+// =================================================================
+// 2. PROFISSIONAIS
+// =================================================================
+
+// Rota: GET "/profissionais"
+// Descrição: Lista todos os profissionais cadastrados.
+
+// Rota: GET "/profissionais/:id"
+// Descrição: Busca um profissional específico pelo ID.
+
+// Rota: POST "/profissionais"
+// Descrição: Cadastra um novo profissional (a senha é criptografada no banco).
+// Body:
+{
+  "nome": "Cidinei dos Gta Santo André",
+  "email": "admin123@gmail.com",
+  "senha": "admin123",
+  "especialidade": "Psicologo"
+}
+
+// Rota: PATCH "/profissionais/:id"
+// Descrição: Atualiza dados de um profissional específico.
+// Body:
+{
+  "nome": "Cidinei dos Gta Alterado",
+  "especialidade": "Psicólogo Clínico"
+}
+
+// Rota: DELETE "/profissionais/:id"
+// Descrição: Remove um profissional pelo ID.
+
+
+// =================================================================
+// 3. PACIENTES
+// =================================================================
+
+// Rota: GET "/pacientes"
+// Headers: Authorization: "token"
+// Descrição: Lista todos os pacientes.
+
+// Rota: GET "/pacientes/cpf/:cpf"
+// Headers: Authorization: "token"
+// Descrição: Busca um paciente específico pelo número do CPF.
+
+// Rota: GET "/pacientes/:id"
+// Headers: Authorization: "token"
+// Descrição: Busca um paciente específico pelo ID.
+
+// Rota: POST "/pacientes"
+// Headers: Authorization: "token"
+// Descrição: Cadastra um novo paciente.
+// Body:
+{
+    "nome": "Beatriz Rocha Mendes",
+    "dataNascimento": "2001-07-25",
+    "telefone": "(51) 99355-1122",
+    "email": "bia.rocha@email.com",
+    "cpf": "05478963211",
+    "endereco": "Av. Protásio Alves, 2350 - Porto Alegre/RS",
+    "profissao": "Estudante",
+    "origem": "Recomendação",
+    "fotoPerfil": "asdfdf54469sdffds45"
+ }
+
+// Rota: PATCH "/pacientes/:id"
+// Headers: Authorization: "token"
+// Descrição: Atualiza parcialmente os dados de um paciente.
+// Body:
+{
+  "telefone": "(51) 99999-8888",
+  "endereco": "Novo Endereço, 123"
+}
+
+// Rota: DELETE "/pacientes/:id"
+// Headers: Authorization: "token"
+// Descrição: Deleta um paciente pelo ID.
+
+
+// =================================================================
+// 4. EVENTOS
+// =================================================================
+
+// Rota: GET "/pacientes/:id/eventos"
+// Headers: Authorization: "token"
+// Descrição: Busca todos os eventos/consultas agendadas para o paciente específico.
+
+// Rota: POST "/pacientes/:id/eventos"
+// Headers: Authorization: "token"
+// Descrição: Cria um novo evento na agenda vinculado ao paciente.
+// Body:
+{
+    "pacienteId": 1,
+    "titulo": "Consulta de Avaliação",
+    "data": "2026-06-10T00:00:00.000Z",
+    "horarioInicio": "14:00",
+    "horarioFim": "15:00"
+  }
+
+
+// =================================================================
+// 5. EVOLUÇÕES
+// =================================================================
+
+// Rota: GET "/pacientes/:id/evolucoes"
+// Headers: Authorization: "token"
+// Descrição: Busca o histórico de evoluções clínicas do paciente clínico.
+
+// Rota: POST "/pacientes/:id/evolucoes"
+// Headers: Authorization: "token"
+// Descrição: Adiciona uma nova evolução de sessão ao prontuário do paciente.
+// Body:
+{
+  "pacienteId": 4,
+  "titulo": "Evolução Extra - Crise de Estresse",
+  "data": "2026-06-22T00:00:00.000Z",
+  "horarioInicio": "2026-06-22T16:00:00.000Z",
+  "horarioFim": "2026-06-22T17:00:00.000Z",
+  "descricao": "Sessão agendada em caráter de urgência após o paciente enfrentar uma semana de alta carga emocional no tribunal. Foco total em técnicas de regulação emocional imediata e exercícios de respiração diafragmática."
+}
