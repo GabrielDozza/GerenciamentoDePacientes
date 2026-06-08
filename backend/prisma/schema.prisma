@@ -13,11 +13,12 @@ datasource db {
 }
 
 model Profissional {
-  id            Int    @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   nome          String
   email         String
   senha         String
   especialidade String
+  fotoPerfil    String?
 }
 
 model Paciente {
@@ -26,22 +27,23 @@ model Paciente {
   dataNascimento DateTime   @db.Date
   telefone       String?
   email          String?
-  cpf            String?    @unique
+  cpf            String?
   endereco       String?
   profissao      String?
   origem         String?
+  fotoPerfil     String?    @db.Text
   eventos        Evento[]
   evolucoes      Evolucao[]
 }
 
 model Evento {
-  id            Int      @id @default(autoincrement())
-  paciente      Paciente @relation(fields: [pacienteId], references: [id])
-  pacienteId    Int
+  id            Int       @id @default(autoincrement())
   titulo        String
   data          DateTime
-  horarioInicio DateTime
-  horarioFim    DateTime
+  horarioInicio String
+  horarioFim    String
+  paciente      Paciente? @relation(fields: [pacienteId], references: [id])
+  pacienteId    Int?
 }
 
 model Evolucao {

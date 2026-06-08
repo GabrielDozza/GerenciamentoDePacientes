@@ -1,3 +1,4 @@
+import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import jwt from "jsonwebtoken";
 
 function geraradorToken(body: any) {
@@ -8,7 +9,7 @@ function geraradorToken(body: any) {
     };
 
     const key = process.env.JWT_TOKEN as string;
-    const token = jwt.sign(payload, key, { expiresIn: "1h" });
+    const token = jwt.sign(payload, key, { expiresIn: "16h" });
 
     return token;
 };
@@ -20,7 +21,7 @@ function verificadorToken(token: any) {
 
         return payload;
     } catch(erro: any) {
-        return erro.message;
+        throw new UnauthorizedException({ message: "Token inválido" });
     };
 };
 

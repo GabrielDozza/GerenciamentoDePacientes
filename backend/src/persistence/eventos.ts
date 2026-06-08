@@ -16,7 +16,7 @@ async function postEventoPaciente(id: String, body: any) {
             paciente: body.paciente,
             pacienteId: Number(id),
             titulo: body.titulo,
-            data: body.data,
+            data: new Date(body.data),
             horarioInicio: body.horarioInicio,
             horarioFim: body.horarioFim
         }

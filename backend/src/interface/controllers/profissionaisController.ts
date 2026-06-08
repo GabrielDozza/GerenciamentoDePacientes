@@ -21,9 +21,10 @@ export class profissionaisController {
     @Post()
     async postProfissional(@Body() body: any) {
         verificaDadosPostProfissionais(body);
-        body.senha = gerarSenhaHash(body.senha);
+        const bodySenhaHash = body; 
+        bodySenhaHash.senha = gerarSenhaHash(body.senha);
 
-        const profissional = postProfissional(body);
+        const profissional = postProfissional(bodySenhaHash);
         return profissional;
     };
 
