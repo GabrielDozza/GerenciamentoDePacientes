@@ -1,0 +1,65 @@
+import { Injectable } from "@nestjs/common";
+import prisma from "../../../prisma/prisma"
+import type { Paciente } from "../models/paciente.model";
+import { IPacienteRepository } from "./pacientes";
+import { PacienteMapper } from "../../application/mappers/paciente.mapper";
+import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { getPacientes, getPacientesId, patchPaciente, postPaciente, getPacientesCpf } from "../../persistence/pacientes";
+
+
+@Injectable()
+export class PacienteRepository implements IPacienteRepository{
+    constructor( 
+        private readonly pacienteMapper : PacienteMapper 
+    ){};
+
+    public async getPacientes() : Promise<PacienteDTO[]>{
+        const pacientes = await getPacientes();
+        let pArray: PacienteDTO[] = [];
+        for (const p of pacientes) {
+            const pDTO : PacienteDTO = this.pacienteMapper.toDTO(p);
+            pArray.push(pDTO);
+        }
+        return pArray;
+    };
+
+    public async getPacientesId(id: String) : Promise<PacienteDTO | null> {
+        const paciente = await getPacientesId(id);
+        if (!paciente) {
+            return null;
+        }
+        const pacienteDTO : PacienteDTO = this.pacienteMapper.toDTO(paciente);
+        return pacienteDTO;
+    };
+
+    public async getPacientesCpf(cpf: String) : Promise<PacienteDTO | null> {
+        const paciente = await getPacientesCpf(cpf);
+        if (!paciente) {
+            return null;
+        }
+        const pacienteDTO : PacienteDTO = this.pacienteMapper.toDTO(paciente);
+        return pacienteDTO;
+    };
+
+    public async postPaciente(body: any) : Promise<Paciente>{
+        const pacienteDTO = this.pacienteMapper.toDTO(body);
+        const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
+        await postPaciente(pacienteDomain);
+        return pacienteDomain;
+    };
+
+    public async patchPaciente(id: String, body: any) : Promise<Paciente | null>{
+        const paciente = getPacientesId(id);
+        if (paciente == null){
+            return null;
+        }
+        const pacienteDTO = this.pacienteMapper.toDTO(body);
+        const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
+        const update = this.pacienteMapper.toUpdateDTO(body);
+        const updatePacienteDomain = await this.pacienteMapper.updateDomain(pacienteDomain, update)
+        await patchPaciente(updatePacienteDomain);
+
+        return updatePacienteDomain;
+    };
+
+}
