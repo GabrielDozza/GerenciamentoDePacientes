@@ -25,5 +25,27 @@ async function postEventoPaciente(id: String, body: any) {
     return evento;
 };
 
-export { getEventosPaciente, postEventoPaciente };
+async function patchEventoPaciente(id: String, body: any) {
+    const evento = await prisma.evento.update({
+        where: {
+            id: Number(id)
+        },
+
+        data: {
+            ...body
+        }
+    });
+
+    return evento;
+};
+
+async function deleteEvento(id: String) {
+    const evento = await prisma.evento.delete({
+        where: { id: Number(id) }
+    });
+
+    return evento;
+};
+
+export { getEventosPaciente, postEventoPaciente, patchEventoPaciente, deleteEvento };
 
