@@ -1,5 +1,5 @@
 import { Body, Controller, ForbiddenException, Get, Header, Headers, Post } from "@nestjs/common";
-import { gerarToken, verificaToken } from "../middlewares/tokenJwt";
+import { geradorToken, verificadorToken } from "../middlewares/tokenJwt";
 import { getProfissionalLogin } from "../../persistence/profissionais";
 import gerarSenhaHash from "../middlewares/hashPassword";
 
@@ -12,7 +12,7 @@ export class authController {
 
 
         if (profissional?.email !== undefined) {
-            const token = gerarToken(profissional);
+            const token = geradorToken(profissional);
             return token;
         } else {
             throw new ForbiddenException({ Message: "Nenhum usuario encontrado" });
@@ -22,7 +22,7 @@ export class authController {
     @Post("token")
     async verificaToken(@Headers("Authorization") token: String) {
         try {
-            const verificacao = verificaToken(token);
+            const verificacao = verificadorToken(token);
             return verificacao;
         } catch (erro) {
             return erro;

@@ -3,7 +3,7 @@ import { Paciente } from "../../domain/models/paciente.model";
 import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
 import { Evento } from "../../domain/models/evento.model";
 import { Evolucao } from "../../domain/models/evolucao.model";
-import verificaDadosBody from "../../interface/middlewares/pacientes";
+import { verificaDadosPostBody, verificaDadosPatchBody } from "../../interface/middlewares/pacientes";
 
 
 @Injectable()
@@ -23,9 +23,7 @@ export class PacienteMapper {
         return paciente;
     }
 
-
     public toDTO = (paciente: Paciente | any) : PacienteDTO => {
-        verificaDadosBody(paciente);
         return {
             id: paciente.id,
             nome: paciente.nome,

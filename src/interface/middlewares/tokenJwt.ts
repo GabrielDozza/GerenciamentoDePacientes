@@ -1,7 +1,7 @@
 import { BadRequestException, UnauthorizedException } from "@nestjs/common";
 import jwt from "jsonwebtoken";
 
-function geraradorToken(body: any) {
+function geradorToken(body: any) {
     const payload = {
         id: body.id,
         nome: body.nome,
@@ -25,4 +25,4 @@ function verificadorToken(token: any) {
     };
 };
 
-export { geraradorToken, verificadorToken };
+export { geradorToken, verificadorToken };

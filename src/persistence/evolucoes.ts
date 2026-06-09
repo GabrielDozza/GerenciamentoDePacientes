@@ -1,17 +1,20 @@
 import prisma from "../../prisma/prisma";
+import { EvolucaoDTO } from "../interface/dto/evolucao.dto";
+import { Paciente } from "../domain/models/paciente.model";
+import { getPacientesId } from "./pacientes";
+import { stringify } from "querystring";
 
-async function getEvolucoesPaciente(id: String) {
+async function getEvolucoesPaciente(paciente: Paciente) {
     const evolucoes = prisma.evolucao.findMany({
-        where: { pacienteId: Number(id) }
+        where: { pacienteId: Number(paciente.id) }
     });
 
     return evolucoes;
 };
 
-async function postEvolucaoPaciente(body: any) {
+async function postEvolucaoPaciente(body: EvolucaoDTO) {
     const evolucao = prisma.evolucao.create({
         data: {
-            paciente: body.paciente,
             pacienteId: body.pacienteId,
             titulo: body.titulo,
             data: body.data,

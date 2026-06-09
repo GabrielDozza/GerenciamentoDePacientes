@@ -1,10 +1,11 @@
 import prisma from "../../prisma/prisma";
 import { Evento } from "../domain/models/evento.model";
+import { Paciente } from "../domain/models/paciente.model";
 
-async function getEventosPaciente(id: String) {
+async function getEventosPaciente(paciente : Paciente) {
     const evento = prisma.evento.findMany({
         where: {
-            pacienteId: Number(id)
+            pacienteId: Number(paciente.id)
         }
     });
 

@@ -7,6 +7,8 @@ import { Evento } from "../../domain/models/evento.model";
 import { Evolucao } from "../../domain/models/evolucao.model";
 import { deletePaciente } from "../../persistence/pacientes";
 import { verificaIdRecebido } from "../../interface/middlewares/pacientes";
+import { postEventoPaciente } from "../../persistence/eventos";
+import { postEvolucaoPaciente } from "../../persistence/evolucoes";
 
 
 
@@ -41,9 +43,7 @@ export class PacienteService {
     async patch(id : String, updatePacienteDTO : UpdatePacienteDTO){
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        if(paciente == null){
-            return null;
-        }
+        if(paciente == null) return null;
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente)
         return await this.pacienteMapper.updateDomain(pacienteDomain, updatePacienteDTO);
     }
@@ -57,38 +57,33 @@ export class PacienteService {
     async addEvento(id : String, evento : Evento){
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        if(paciente == null){
-            return null;
-        }
-        paciente.eventos.push(evento);
-        return paciente;
+        if(paciente == null) return null;
+        const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
+        pacienteDomain.eventos.push(evento);
+        postEventoPaciente(evento);
+        return evento;
     }
 
     async addEvolucao(id : String, evolucao : Evolucao){
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        if(paciente == null){
-            return null;
-        }
-        paciente.evolucoes.push(evolucao);
-        return paciente;
+        if(paciente == null) return null;
+        const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
+        pacienteDomain.eventos.push(evolucao);
+        return evolucao;
     }
 
     async getEventos(id : String) : Promise<Evento[] | null>{
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        if(paciente == null){
-            return null;
-        }
+        if(paciente == null) return null;
         return paciente.eventos;
     }
 
     async getEvolucoes(id : String) : Promise<Evolucao[] | null>{
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        if(paciente == null){
-            return null;
-        }
+        if(paciente == null) return null;
         return paciente.evolucoes;
     }
 }

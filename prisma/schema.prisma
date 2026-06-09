@@ -31,7 +31,7 @@ model Paciente {
   endereco       String?
   profissao      String?
   origem         String?
-  fotoPerfil     String?    @db.Text
+  //fotoPerfil     String?    @db.Text
   eventos        Evento[]
   evolucoes      Evolucao[]
 }
@@ -40,8 +40,8 @@ model Evento {
   id            Int       @id @default(autoincrement())
   titulo        String
   data          DateTime
-  horarioInicio String
-  horarioFim    String
+  horarioInicio DateTime
+  horarioFim    DateTime
   paciente      Paciente? @relation(fields: [pacienteId], references: [id])
   pacienteId    Int?
 }

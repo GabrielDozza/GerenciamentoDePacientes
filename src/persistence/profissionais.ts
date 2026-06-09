@@ -2,7 +2,7 @@ import prisma from "../../prisma/prisma";
 import { Profissional } from "../domain/models/profissional.model";
 
 async function getProfissionais() {
-    const profissionais = await prisma.paciente.findMany({
+    const profissionais = await prisma.profissional.findMany({
             select: {
                 id: true,
                 nome: true,

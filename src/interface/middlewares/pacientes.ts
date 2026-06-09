@@ -1,6 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
 
-function verificaDadosPostBody(body: any) {
+export function verificaDadosPostBody(body: any) {
     if (body.nome === undefined)
         throw new BadRequestException({ message: "Digite um nome" });
 
@@ -35,7 +35,7 @@ function verificaDadosPostBody(body: any) {
         throw new BadRequestException({ message: "FotoPerfil precisa ser uma string" });
 };
 
-function verificaDadosPathBody(body: any) {
+export function verificaDadosPatchBody(body: any) {
     if (body.nome === undefined)
         throw new BadRequestException({ message: "Digite um nome" });
 
@@ -70,10 +70,8 @@ function verificaDadosPathBody(body: any) {
         throw new BadRequestException({ message: "FotoPerfil precisa ser uma string" });
 };
 
-function verificaIdRecebido(id: String) {
+export function verificaIdRecebido(id: String) {
     if (isNaN(Number(id))) {
         throw new BadRequestException({ message: "Id deve ser um número inteiro" })
     };
 };
-
-export { verificaDadosPostBody, verificaDadosPathBody, verificaIdRecebido };

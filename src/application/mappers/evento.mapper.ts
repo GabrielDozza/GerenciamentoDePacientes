@@ -5,10 +5,10 @@ import { EventoDTO } from "../../interface/dto/evento.dto";
 
 @Injectable()
 export class EventoMapper {
-    public toDomain = async (eventoDTO: EventoDTO) : Promise<Evento> => {
+    public toDomain = async (idPaciente: String, eventoDTO: EventoDTO) : Promise<Evento> => {
         const evento = new Evento(
             eventoDTO.id,
-            eventoDTO.pacienteId,
+            Number(idPaciente),
             eventoDTO.titulo,
             eventoDTO.data,
             eventoDTO.horarioInicio,

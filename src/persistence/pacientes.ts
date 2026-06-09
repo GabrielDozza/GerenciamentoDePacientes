@@ -1,5 +1,4 @@
 import { Paciente } from "../domain/models/paciente.model";
-import { PacienteDTO, UpdatePacienteDTO } from "../interface/dto/paciente.dto";
 import prisma from "../../prisma/prisma";
 
 async function getPacientes() {

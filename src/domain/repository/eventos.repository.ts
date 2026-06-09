@@ -9,17 +9,19 @@ import { PacienteRepository } from "./pacientes.repository";
 import { getPacientesId } from "../../persistence/pacientes";
 import { PacienteMapper } from "../../application/mappers/paciente.mapper";
 import { Paciente } from "../models/paciente.model";
+import { PacienteService } from "../../application/services/paciente.service";
+import { verificaIdRecebido } from "../../interface/middlewares/pacientes";
 
 
 export class EventoRepository implements IEventoRepository {
     constructor(
         private readonly eventoMapper: EventoMapper,
-        private readonly pacienteRepository: PacienteRepository,
-        private readonly pacienteMapper: PacienteMapper
+        private readonly pacienteService: PacienteService,
+        //private readonly pacienteMapper: PacienteMapper
     ) {}
     
-    public async getEventosPaciente(id: String) : Promise<EventoDTO[]> {
-        const eventos = await getEventosPaciente(id);
+    public async getEventosPaciente(paciente : Paciente) : Promise<EventoDTO[]> {
+        const eventos = await getEventosPaciente(paciente);
         let evnArray: EventoDTO[] = [];
         for (const evn of eventos){
             const evnResponse = this.eventoMapper.toDTO(evn);
@@ -28,15 +30,17 @@ export class EventoRepository implements IEventoRepository {
         return evnArray;
     };
 
-    public async postEventoPaciente(body: any) : Promise<Evento | null> {
-        const paciente = await this.pacienteRepository.getPacientesId(body.pacienteId);
+    public async postEventoPaciente(idPaciente: String, body: any) : Promise<Evento | null> {
+        verificaIdRecebido(idPaciente);
+        const paciente = await this.pacienteService.getById(idPaciente);
+        console.log("repo 1: "+JSON.stringify(paciente));
         if (paciente == null){
             return null;
         }
-        const pacienteDomain : Paciente = await this.pacienteMapper.toDomain(paciente);
         const evnDTO : EventoDTO = this.eventoMapper.toDTO(body);
-        const evnDomain : Evento = await this.eventoMapper.toDomain(evnDTO);
-        pacienteDomain.eventos.push(evnDomain);
+        console.log("repo 2: "+JSON.stringify(evnDTO));
+        const evnDomain : Evento = await this.eventoMapper.toDomain(String(evnDTO.pacienteId),evnDTO);
+        console.log("repo 3: "+JSON.stringify(evnDomain));
         return evnDomain;
     };
 };
