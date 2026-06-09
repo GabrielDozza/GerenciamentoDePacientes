@@ -33,6 +33,9 @@ export class profissionaisController {
         verificaIdReceibo(idRecebido);
         verificaDadosPatchProfissionais(body);
 
+        const bodySenhaHash = body; 
+        bodySenhaHash.senha = gerarSenhaHash(body.senha);
+
         const profissional = patchProfissional(idRecebido, body);
         return profissional;
     }

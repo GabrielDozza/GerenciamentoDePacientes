@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Headers, Param, Patch, Post } from "@nestjs/common";
-import { deletePacienteId, getPacientes, getPacientesCpf, getPacientesId, patchPaciente, postPaciente } from "../../persistence/pacientes";
+import { deletePacienteId, getPacientes, getPacientesCpf, getPacientesId, getPacientesNome, patchPaciente, postPaciente } from "../../persistence/pacientes";
 import { verificaDadosPathBody, verificaDadosPostBody, verificaIdReceibo } from "../middlewares/pacientes";
 import { getEventosPaciente, postEventoPaciente } from "../../persistence/eventos";
 import { getEvolucoesPaciente, postEvolucaoPaciente } from "../../persistence/evolucoes";
@@ -24,6 +24,14 @@ export class pacientesController {
         const paciente = await getPacientesCpf(cpfRecebido);
         return paciente;
     };
+
+    @Get("/nome/:nome")
+    async getPacienteNome(@Headers("Authorization") token: string, @Param("nome") nomeRecebido: string) {
+        verificadorToken(token);
+
+        const pacientes = await getPacientesNome(nomeRecebido);
+        return pacientes;
+    }
 
     @Get(":id")
     async getPacientesId(@Param("id") idRecebido: String, @Headers("Authorization") token: String) {
