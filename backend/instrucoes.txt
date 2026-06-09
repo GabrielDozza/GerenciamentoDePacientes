@@ -67,6 +67,10 @@
 // Headers: Authorization: "token"
 // Descrição: Busca um paciente específico pelo número do CPF.
 
+// Rota: GET "/pacientes/nome/:nome"
+// Headers: Authorization: "token"
+// Descrição: Lista os pacientes com o nome digitado ou sobrenome.
+
 // Rota: GET "/pacientes/:id"
 // Headers: Authorization: "token"
 // Descrição: Busca um paciente específico pelo ID.
