@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import prisma from "../../../prisma/prisma"
 import type { Paciente } from "../models/paciente.model";
 import { IPacienteRepository } from "./pacientes";
 import { PacienteMapper } from "../../application/mappers/paciente.mapper";
-import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
+import { PacienteDTO } from "../../interface/dto/paciente.dto";
 import { getPacientes, getPacientesId, patchPaciente, postPaciente, getPacientesCpf } from "../../persistence/pacientes";
 
 
@@ -23,16 +22,13 @@ export class PacienteRepository implements IPacienteRepository{
         return pArray;
     };
 
-    public async getPacientesId(id: String) : Promise<PacienteDTO | null> {
+    public async getPacientesId(id: String) : Promise<PacienteDTO>{
         const paciente = await getPacientesId(id);
-        if (!paciente) {
-            return null;
-        }
-        const pacienteDTO : PacienteDTO = this.pacienteMapper.toDTO(paciente);
+        const pacienteDTO = this.pacienteMapper.toDTO(paciente);
         return pacienteDTO;
     };
 
-    public async postPaciente(body: any) : Promise<Paciente>{ //feito
+    public async postPaciente(body: any) : Promise<Paciente>{
         const pacienteDTO = this.pacienteMapper.toDTO(body);
         const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
 
@@ -40,7 +36,7 @@ export class PacienteRepository implements IPacienteRepository{
         return pacienteDomain;
     };
 
-    public async patchPaciente(id: String, body: any) : Promise<Paciente>{ //feito
+    public async patchPaciente(id: String, body: any) : Promise<Paciente>{
         const paciente = getPacientesId(id);
         const pacienteDTO = this.pacienteMapper.toDTO(paciente);
         const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);

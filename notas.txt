@@ -1,9 +1,34 @@
 fluxo dos posts:
 controller -> faz a validação de dados -> chama o service
 service -> chama o repository
-repository ->
+repository -> transforma em dto dps domain usando o mapper e chama o persistence
+persistence -> joga pro prisma
 
 pacientes
+-repository FEITO
+-service
+-controller
+-mapper
+
 profissionais
+-repository
+-service
+-controller
+-mapper
+
+
 eventos
+-repository
+-service
+-controller
+-mapper
+
 evolucoes
+-repository
+-service
+-controller
+-mapper
+
+
+
+PRECISA FAZER: PACIENTE SERVICE GET EVENTOS/EVOLUCOES

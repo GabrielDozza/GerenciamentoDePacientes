@@ -1,10 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Headers } from "@nestjs/common";
-import type { PacienteDTO, UpdatePacienteDTO } from "../dto/paciente.dto";
-import type { Paciente } from "../../domain/models/paciente.model";
 import { PacienteService } from "../../application/services/paciente.service";
 import { verificadorToken } from "../middlewares/tokenJwt";
-import type { EventoDTO } from "../dto/evento.dto";
-import type { EvolucaoDTO } from "../dto/evolucao.dto";
 import { EventoService } from "../../application/services/evento.service";
 import { EvolucaoService } from "../../application/services/evolucao.service";
 import verificaDadosPostEventos from "../middlewares/eventos";
@@ -20,39 +16,37 @@ export class PacientesController {
 
     // GETS
     @Get()
-    async getPacientes(/*@Headers("Authorization") token: String*/) {
+    async getPacientes(/*@Headers("Authorization") token: String*/) { //feito
+        console.log(`getPacientes from pacientes.controller`)
         //verificadorToken(token);
         const pacientes = await this.pacienteService.getAll();
         return pacientes;
     };
 
-    @Get("/cpf/:cpf")
-    async getPacienteCpf(@Headers("Authorization") token: String, @Param("cpf") cpfRecebido: String) {
-        //verificadorToken(token);
-        const paciente = await this.pacienteService.getByCpf(cpfRecebido);
-        return paciente;
-    };
-
     @Get(":id")
-    async getPacientesId(@Param("id") idRecebido: String, @Headers("Authorization") token: String) {
+    async getPacientesId(@Param("id") idRecebido: String, /*@Headers("Authorization") token: String*/) { //feito
+        console.log(`getPacientesId from pacientes.controller`)
         //verificadorToken(token);
+        verificaIdRecebido(idRecebido);
         const paciente = await this.pacienteService.getById(idRecebido);
         return paciente;
     };
 
     //POSTS
     @Post()
-    async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) {
+    async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) { //feito
+        console.log(`postPaciente from pacientes.controller`)
         //verificadorToken(token);
         const novoPaciente = await this.pacienteService.create(body);
         return novoPaciente;
     };
 
     @Patch(":id")
-    async patchPaciente(@Param("id") idRecebido: String, @Body() update: any, @Headers("Authorization") token: String) {
+    async patchPaciente(@Param("id") idRecebido: String, @Body() update: any/*, @Headers("Authorization") token: String*/) {
+        console.log(`patchPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
-        //console.log(idRecebido);
+        
         const updatePaciente = await this.pacienteService.patch(idRecebido, update)
         if (updatePaciente == null){
             return null;
@@ -61,8 +55,10 @@ export class PacientesController {
     };
 
     @Delete(":id")
-    async deletePaciente(@Param("id") idRecebido: String, @Headers("Authorization") token: String) {
+    async deletePaciente(@Param("id") idRecebido: String/*, @Headers("Authorization") token: String*/) {
+        console.log(`deletePaciente from pacientes.controller`)
         //verificadorToken(token);
+        verificaIdRecebido(idRecebido);
         console.log(idRecebido);
         const paciente = await this.pacienteService.delete(idRecebido);
         return paciente;
@@ -70,15 +66,18 @@ export class PacientesController {
 
     // PACIENTE EVENTOS
     @Get(":id/eventos")
-    async getEventosPaciente(@Param("id") idRecebido: String, @Headers("Authorization") token: string) {
+    async getEventosPaciente(@Param("id") idRecebido: String/*, @Headers("Authorization") token: string*/) {
+        console.log(`getEventosPaciente from pacientes.controller`)
         //verificadorToken(token);
+        verificaIdRecebido(idRecebido);
 
         const eventos = await this.pacienteService.getEventos(idRecebido);
         return eventos;
     };
 
     @Post(":id/eventos")
-    async postEventoPaciente(@Param("id") idRecebido: String, @Body() body: any, @Headers("Authorization") token: string) {
+    async postEventoPaciente(@Param("id") idRecebido: String, @Body() body: any/*, @Headers("Authorization") token: string*/) {
+        console.log(`postEventoPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
         verificaDadosPostEventos(body);
@@ -89,7 +88,8 @@ export class PacientesController {
 
     // PACIENTE EVOLUCOES
     @Get(":id/evolucoes")
-    async getEvolucoesPaciente(@Param("id") idRecebido: String, @Headers("Authorization") token: string) {
+    async getEvolucoesPaciente(@Param("id") idRecebido: String/*, @Headers("Authorization") token: string*/) {
+        console.log(`getEvolucoesPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
 
@@ -98,8 +98,10 @@ export class PacientesController {
     };
 
     @Post(":id/evolucoes")
-    async postEvolucaoPaciente(@Param("id") idRecebido: String, @Body() body: any, @Headers("Authorization") token: string) {
+    async postEvolucaoPaciente(@Param("id") idRecebido: String, @Body() body: any/*, @Headers("Authorization") token: string*/) {
+        console.log(`postEvolucaoPaciente from pacientes.controller`)
         //verificadorToken(token);
+        verificaIdRecebido(idRecebido);
         //verificaDadosPostEventos(idRecebido); //essa funcao não tem versao para evolucoes
 
         const evolucao = await this.pacienteService.addEvolucao(idRecebido, body);
