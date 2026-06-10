@@ -71,17 +71,17 @@ export class PacienteService {
         return evoDomain;
     }
 
-    async getEventos(id : String) : Promise<Evento[] | null>{
-        verificaIdRecebido(id);
+    async getEventos(id : String) : Promise<Evento[]>{
         const paciente = await this.pacienteRepository.getPacientesId(id);
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
         const eArray = await this.eventoService.getByPaciente(pacienteDomain)
         return eArray;
     }
 
-    async getEvolucoes(id : String) : Promise<Evolucao[] | null>{
-        verificaIdRecebido(id);
+    async getEvolucoes(id : String) : Promise<Evolucao[]>{
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        return paciente.evolucoes;
+        const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
+        const eArray = await this.evolucaoService.getByPaciente(pacienteDomain)
+        return eArray;
     }
 }

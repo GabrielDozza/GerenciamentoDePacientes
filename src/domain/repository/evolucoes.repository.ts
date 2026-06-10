@@ -10,13 +10,12 @@ export class EvolucaoRepository implements IEvolucaoRepository {
     constructor(
         private readonly evolucaoMapper: EvolucaoMapper
     ) {};
-    public async getEvolucoesPaciente(paciente: Paciente) : Promise<Evolucao[]> {
+    public async getEvolucoesPaciente(paciente: Paciente) : Promise<EvolucaoDTO[]> {
         const evolucoes = await getEvolucoesPaciente(paciente);
         let evnArray: EvolucaoDTO[] = [];
         for (const evn of evolucoes){
             const evnResponse = this.evolucaoMapper.toDTO(evn);
-            const evnDomain = this.evolucaoMapper.toDomain(evnResponse);
-            evnArray.push(evnDomain);
+            evnArray.push(evnResponse);
         }
         return evnArray;
     };

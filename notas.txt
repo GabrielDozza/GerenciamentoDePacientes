@@ -11,27 +11,22 @@ pacientes
 -repository FEITO
 -service
 -controller FEITO
--mapper
 
 profissionais
--repository
+-repository FEITO
 -service
 -controller
--mapper
 
 
 eventos
--repository
+-repository FEITO
 -service
 -controller
--mapper
 
 evolucoes
--repository
+-repository FEITO
 -service
 -controller
--mapper
-
 
 
 PRECISA FAZER: PACIENTE SERVICE GET EVENTOS/EVOLUCOES

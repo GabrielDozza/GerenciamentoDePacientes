@@ -3,7 +3,7 @@ import { Paciente } from "../models/paciente.model";
 
 export interface IPacienteRepository{
     getPacientes() : Promise<PacienteDTO[]>;
-    getPacientesId(id: String) : Promise<PacienteDTO | null>;
+    getPacientesId(id: String) : Promise<PacienteDTO>;
     postPaciente(body: any) : Promise<PacienteDTO>;
-    patchPaciente(id: String, body: any) : Promise<PacienteDTO | null>;
+    patchPaciente(id: String, body: any) : Promise<PacienteDTO>;
 }

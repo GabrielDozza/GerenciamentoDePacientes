@@ -4,5 +4,5 @@ import { EventoDTO } from "../../interface/dto/evento.dto";
 
 export interface IEventoRepository{
     getEventosPaciente(paciente : Paciente) : Promise<EventoDTO[]>
-    postEventoPaciente(idPaciente: String, body: any) : Promise<Evento | null>;
+    postEventoPaciente(body: any) : Promise<Evento>;
 }

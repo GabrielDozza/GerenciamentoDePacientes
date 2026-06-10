@@ -23,29 +23,25 @@ export class ProfissionalRepository implements IProfissionalRepository{
         return pArray;
     };
 
-    public async getProfissionalId(id: String) : Promise<ProfissionalDTO | null> {
+    public async getProfissionalId(id: String) : Promise<ProfissionalDTO> {
         const profissional = await getProfissionalId(id);
-        if (!profissional) {
-            return null;
-        }
-        const profissionalDTO : ProfissionalDTO = this.profissionalMapper.toDTO(profissional);
+        const profissionalDTO = this.profissionalMapper.toDTO(profissional);
         return profissionalDTO;
     };
 
     public async postProfissional(body: any) : Promise<Profissional>{
         const profissionalDTO = this.profissionalMapper.toDTO(body);
-        const profissionalDomain = await this.profissionalMapper.toDomain(profissionalDTO);  
+        const profissionalDomain = await this.profissionalMapper.toDomain(profissionalDTO);
+
         await postProfissional(profissionalDomain);
         return profissionalDomain;
     };
 
-    public async patchProfissional(id: String, body: any) : Promise<Profissional | null>{
+    public async patchProfissional(id: String, body: any) : Promise<Profissional>{
         const profissional = getProfissionalId(id);
-        if (profissional == null){
-            return null;
-        }
-        const profissionalDTO = this.profissionalMapper.toDTO(body);
+        const profissionalDTO = this.profissionalMapper.toDTO(profissional);
         const profissionalDomain = await this.profissionalMapper.toDomain(profissionalDTO);
+        
         const update = this.profissionalMapper.toUpdateDTO(body);
         const updateProfissionalDomain = await this.profissionalMapper.updateDomain(profissionalDomain, update)
         await patchProfissional(updateProfissionalDomain);

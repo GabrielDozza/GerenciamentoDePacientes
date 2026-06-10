@@ -1,5 +1,4 @@
-import { Paciente } from "@prisma/client";
-import { IsAlphanumeric, IsDate, IsNumber, IsString } from "class-validator";
+import { IsDate, IsNumber, IsString } from "class-validator";
 
 export class EvolucaoDTO{
     @IsNumber()

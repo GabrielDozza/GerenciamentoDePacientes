@@ -34,6 +34,20 @@ async function getPacientesCpf(cpf: String) {
     return paciente;
 };
 
+async function getPacientesNome(nome: string) {
+    const pacientes = await prisma.paciente.findMany({
+        where: {
+            nome: {
+                contains: nome,
+                mode: 'insensitive'
+            }
+        }
+    });
+
+    return pacientes;
+}
+
+
 
 async function postPaciente(paciente: Paciente) {
     const novoPaciente = await prisma.paciente.create({
@@ -81,4 +95,4 @@ async function deletePaciente(id: String) {
     return paciente;
 };
 
-export { getPacientes, getPacientesId, getPacientesCpf, postPaciente, patchPaciente, deletePaciente }
+export { getPacientes, getPacientesId, getPacientesCpf, getPacientesNome, postPaciente, patchPaciente, deletePaciente }

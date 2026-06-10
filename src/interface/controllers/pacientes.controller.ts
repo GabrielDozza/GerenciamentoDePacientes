@@ -19,6 +19,7 @@ export class PacientesController {
     async getPacientes(/*@Headers("Authorization") token: String*/) {
         console.log(`getPacientes from pacientes.controller`)
         //verificadorToken(token);
+        
         const pacientes = await this.pacienteService.getAll();
         return pacientes;
     };
@@ -28,6 +29,7 @@ export class PacientesController {
         console.log(`getPacientesId from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
+
         const paciente = await this.pacienteService.getById(idRecebido);
         return paciente;
     };
@@ -36,8 +38,9 @@ export class PacientesController {
     @Post()
     async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) {
         console.log(`postPaciente from pacientes.controller`)
-        verificaDadosPostBody(body);
         //verificadorToken(token);
+        verificaDadosPostBody(body);
+        
         const novoPaciente = await this.pacienteService.create(body);
         return novoPaciente;
     };
@@ -58,7 +61,7 @@ export class PacientesController {
         console.log(`deletePaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
-        console.log(idRecebido);
+
         const paciente = await this.pacienteService.delete(idRecebido);
         return paciente;
     };
@@ -80,6 +83,7 @@ export class PacientesController {
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
         verificaDadosPostEventos(body);
+
         const evento = await this.eventoService.create(idRecebido, body);
         return evento;
     };

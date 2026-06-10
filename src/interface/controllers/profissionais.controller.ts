@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { ProfissionalService } from "../../application/services/profissional.service";
 import { verificaDadosPatchProfissionais, verificaIdRecebido } from "../middlewares/profissionais";
-import { getProfissionalId } from "../../persistence/profissionais";
 
 @Controller("profissionais")
 export class profissionaisController {
