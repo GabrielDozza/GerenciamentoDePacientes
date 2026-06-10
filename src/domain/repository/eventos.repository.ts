@@ -2,7 +2,7 @@ import prisma from "../../../prisma/prisma";
 import { EventoMapper } from "../../application/mappers/evento.mapper";
 import { Evento } from "../models/evento.model";
 import { IEventoRepository } from "./eventos";
-import { getEventosPaciente } from "../../persistence/eventos"
+import { getEventosPaciente, postEventoPaciente } from "../../persistence/eventos"
 import { EventoDTO } from "../../interface/dto/evento.dto";
 import { eventosController } from "../../interface/controllers/eventos.controller";
 import { getPacientesId } from "../../persistence/pacientes";
@@ -26,17 +26,11 @@ export class EventoRepository implements IEventoRepository {
         return evnArray;
     };
 
-    public async postEventoPaciente(body: any) : Promise<Evento | null> {
-        verificaIdRecebido(String(body.pacienteId));
-        const paciente = await getPacientesId(String(body.pacienteId));
-        console.log("repo 1: "+JSON.stringify(paciente));
-        if (paciente == null){
-            return null;
-        }
-        const evnDTO : EventoDTO = this.eventoMapper.toDTO(body);
-        console.log("repo 2: "+JSON.stringify(evnDTO));
+    public async postEventoPaciente(body: any) : Promise<Evento> {
+        const evnDTO = this.eventoMapper.toDTO(body);
         const evnDomain : Evento = await this.eventoMapper.toDomain(evnDTO);
-        console.log("repo 3: "+JSON.stringify(evnDomain));
+        
+        postEventoPaciente(evnDomain);
         return evnDomain;
     };
 };

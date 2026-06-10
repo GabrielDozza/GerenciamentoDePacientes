@@ -10,11 +10,12 @@ import { getEventosPaciente } from "../../persistence/eventos";
 @Injectable()
 export class EventoService {
     constructor(
-        private readonly eventoMapper: EventoMapper
+        private readonly eventoMapper: EventoMapper,
+        private readonly eventoRepository: EventoRepository
     ) {}
 
     async getByPaciente(paciente : Paciente){
-        return getEventosPaciente(paciente);
+        return this.eventoRepository.getEventosPaciente(paciente);
     }
 
     async create(idPaciente : String, evento : any) : Promise<Evento>{

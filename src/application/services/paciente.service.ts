@@ -11,6 +11,9 @@ import { postEventoPaciente } from "../../persistence/eventos";
 import { postEvolucaoPaciente } from "../../persistence/evolucoes";
 import { EventoMapper } from "../mappers/evento.mapper";
 import verificaDadosPostEventos from "../../interface/middlewares/eventos";
+import { EventoService } from "./evento.service";
+import { PacientesController } from "../../interface/controllers/pacientes.controller";
+import { EvolucaoService } from "./evolucao.service";
 
 
 
@@ -19,7 +22,8 @@ export class PacienteService {
     constructor(
         private readonly pacienteRepository: PacienteRepository,
         private readonly pacienteMapper: PacienteMapper,
-        private readonly eventoMapper: EventoMapper
+        private readonly eventoService: EventoService,
+        private readonly evolucaoService : EvolucaoService
     ) {}
 
     async getAll(){
@@ -48,35 +52,31 @@ export class PacienteService {
     }
 
     async addEvento(id : String, evento : any){
-        verificaIdRecebido(id);
-        verificaDadosPostEventos(evento);
-        
         const paciente = await this.pacienteRepository.getPacientesId(id);
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
 
-        const evnDTO = this.eventoMapper.toDTO(evento);
-        const evnDomain = await this.eventoMapper.toDomain(evnDTO);
+        const evnDomain = await this.eventoService.create(id, evento);
+        
         pacienteDomain.eventos.push(evnDomain);
-        await postEventoPaciente(evnDomain);
-        return evnDTO;
+        return evnDomain;
     }
 
     async addEvolucao(id : String, evolucao : any){
-        verificaIdRecebido(id);
-        const evoDTO = this.eventoMapper.toDTO(evolucao);
-        const evoDomain = await this.eventoMapper.toDomain(evoDTO);
-
         const paciente = await this.pacienteRepository.getPacientesId(id);
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
-        pacienteDomain.eventos.push(evoDomain);
-        await postEventoPaciente(evoDomain);
-        return evoDTO;
+
+        const evoDomain = await this.evolucaoService.create(id, evolucao);
+        
+        pacienteDomain.evolucoes.push(evoDomain);
+        return evoDomain;
     }
 
     async getEventos(id : String) : Promise<Evento[] | null>{
         verificaIdRecebido(id);
         const paciente = await this.pacienteRepository.getPacientesId(id);
-        return paciente.eventos;
+        const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
+        const eArray = await this.eventoService.getByPaciente(pacienteDomain)
+        return eArray;
     }
 
     async getEvolucoes(id : String) : Promise<Evolucao[] | null>{

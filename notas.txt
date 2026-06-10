@@ -4,10 +4,13 @@ service -> chama o repository
 repository -> transforma em dto dps domain usando o mapper e chama o persistence
 persistence -> joga pro prisma
 
+fluxo de adicionar evento/evo:
+controller(paciente) -> faz a validação de dados -> chama o service
+
 pacientes
 -repository FEITO
 -service
--controller
+-controller FEITO
 -mapper
 
 profissionais

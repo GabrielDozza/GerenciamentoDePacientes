@@ -4,7 +4,7 @@ import { verificadorToken } from "../middlewares/tokenJwt";
 import { EventoService } from "../../application/services/evento.service";
 import { EvolucaoService } from "../../application/services/evolucao.service";
 import verificaDadosPostEventos from "../middlewares/eventos";
-import { verificaIdRecebido } from "../middlewares/pacientes";
+import { verificaDadosPatchBody, verificaDadosPostBody, verificaIdRecebido } from "../middlewares/pacientes";
 
 @Controller("pacientes")
 export class PacientesController {
@@ -16,7 +16,7 @@ export class PacientesController {
 
     // GETS
     @Get()
-    async getPacientes(/*@Headers("Authorization") token: String*/) { //feito
+    async getPacientes(/*@Headers("Authorization") token: String*/) {
         console.log(`getPacientes from pacientes.controller`)
         //verificadorToken(token);
         const pacientes = await this.pacienteService.getAll();
@@ -24,7 +24,7 @@ export class PacientesController {
     };
 
     @Get(":id")
-    async getPacientesId(@Param("id") idRecebido: String, /*@Headers("Authorization") token: String*/) { //feito
+    async getPacientesId(@Param("id") idRecebido: String, /*@Headers("Authorization") token: String*/) {
         console.log(`getPacientesId from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
@@ -34,8 +34,9 @@ export class PacientesController {
 
     //POSTS
     @Post()
-    async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) { //feito
+    async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) {
         console.log(`postPaciente from pacientes.controller`)
+        verificaDadosPostBody(body);
         //verificadorToken(token);
         const novoPaciente = await this.pacienteService.create(body);
         return novoPaciente;
@@ -46,11 +47,9 @@ export class PacientesController {
         console.log(`patchPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
+        verificaDadosPatchBody(update);
         
         const updatePaciente = await this.pacienteService.patch(idRecebido, update)
-        if (updatePaciente == null){
-            return null;
-        }
         return updatePaciente;
     };
 
@@ -81,7 +80,6 @@ export class PacientesController {
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
         verificaDadosPostEventos(body);
-        body.pacienteId = Number(idRecebido);
         const evento = await this.eventoService.create(idRecebido, body);
         return evento;
     };

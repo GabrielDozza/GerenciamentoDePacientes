@@ -1,33 +1,31 @@
 import prisma from "../../../prisma/prisma";
 import { EvolucaoMapper } from "../../application/mappers/evolucao.mapper";
+import { postEvolucaoPaciente, getEvolucoesPaciente } from "../../persistence/evolucoes";
 import { Evolucao } from "../models/evolucao.model";
+import { Paciente } from "../models/paciente.model";
 import { IEvolucaoRepository } from "./evolucoes";
+import { EvolucaoDTO } from "../../interface/dto/evolucao.dto";
 
 export class EvolucaoRepository implements IEvolucaoRepository {
     constructor(
         private readonly evolucaoMapper: EvolucaoMapper
     ) {};
-    public async getEvolucoesPaciente(id: String) : Promise<Evolucao[]> {
-        const evolucoes = prisma.evolucao.findMany({
-            where: { pacienteId: Number(id) }
-        });
-
-        return evolucoes;
+    public async getEvolucoesPaciente(paciente: Paciente) : Promise<Evolucao[]> {
+        const evolucoes = await getEvolucoesPaciente(paciente);
+        let evnArray: EvolucaoDTO[] = [];
+        for (const evn of evolucoes){
+            const evnResponse = this.evolucaoMapper.toDTO(evn);
+            const evnDomain = this.evolucaoMapper.toDomain(evnResponse);
+            evnArray.push(evnDomain);
+        }
+        return evnArray;
     };
 
     public async postEvolucaoPaciente(body: any) : Promise<Evolucao> {
-        const evolucao = prisma.evolucao.create({
-            data: {
-                paciente: body.paciente,
-                pacienteId: body.pacienteId,
-                titulo: body.titulo,
-                data: body.data,
-                horarioInicio: body.horarioInicio,
-                horarioFim: body.horarioFim,
-                descricao: body.descricao
-            }
-        });
-
-        return evolucao;
+        const evoDTO = this.evolucaoMapper.toDTO(body);
+        const evoDomain = await this.evolucaoMapper.toDomain(evoDTO);
+        
+        postEvolucaoPaciente(evoDomain)
+        return evoDomain;
     };
 };
