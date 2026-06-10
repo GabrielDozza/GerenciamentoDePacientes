@@ -10,7 +10,6 @@ import { getEventosPaciente } from "../../persistence/eventos";
 @Injectable()
 export class EventoService {
     constructor(
-        private readonly eventoRepository: EventoRepository,
         private readonly eventoMapper: EventoMapper
     ) {}
 
@@ -18,12 +17,12 @@ export class EventoService {
         return getEventosPaciente(paciente);
     }
 
-    async create(idPaciente: String, eventoDTO : EventoDTO) : Promise<Evento | null>{
-        const evento = await this.eventoMapper.toDomain(idPaciente, eventoDTO);
-        console.log("create 1: "+JSON.stringify(evento));
-        const eventoDomain = await this.eventoRepository.postEventoPaciente(idPaciente, evento);
-        console.log("create 2: "+JSON.stringify(eventoDomain));
-        return eventoDomain;
+    async create(idPaciente : String, evento : any) : Promise<Evento>{
+        evento.pacienteId = Number(idPaciente);
+        const evnDTO = this.eventoMapper.toDTO(evento);
+        const evnDomain = await this.eventoMapper.toDomain(evnDTO);
+    
+        return evnDomain;
     }
     
 }

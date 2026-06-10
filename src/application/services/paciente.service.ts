@@ -5,10 +5,12 @@ import { PacienteRepository } from "../../domain/repository/pacientes.repository
 import { Paciente } from "../../domain/models/paciente.model";
 import { Evento } from "../../domain/models/evento.model";
 import { Evolucao } from "../../domain/models/evolucao.model";
-import { deletePaciente } from "../../persistence/pacientes";
-import { verificaIdRecebido } from "../../interface/middlewares/pacientes";
+import { deletePaciente, getPacientesId } from "../../persistence/pacientes";
+import { verificaDadosPatchBody, verificaDadosPostBody, verificaIdRecebido } from "../../interface/middlewares/pacientes";
 import { postEventoPaciente } from "../../persistence/eventos";
 import { postEvolucaoPaciente } from "../../persistence/evolucoes";
+import { EventoMapper } from "../mappers/evento.mapper";
+import verificaDadosPostEventos from "../../interface/middlewares/eventos";
 
 
 
@@ -16,7 +18,8 @@ import { postEvolucaoPaciente } from "../../persistence/evolucoes";
 export class PacienteService {
     constructor(
         private readonly pacienteRepository: PacienteRepository,
-        private readonly pacienteMapper: PacienteMapper
+        private readonly pacienteMapper: PacienteMapper,
+        private readonly eventoMapper: EventoMapper
     ) {}
 
     async getAll(){
@@ -35,17 +38,21 @@ export class PacienteService {
         return paciente;
     }
     
-    async create(pacienteDTO : PacienteDTO) : Promise<Paciente>{
-        const paciente = await this.pacienteMapper.toDomain(pacienteDTO);
+    async create(paciente : any) : Promise<Paciente>{
+        verificaDadosPostBody(paciente);
         return await this.pacienteRepository.postPaciente(paciente);
     }
 
-    async patch(id : String, updatePacienteDTO : UpdatePacienteDTO){
+    async patch(id : String, update : any){
         verificaIdRecebido(id);
-        const paciente = await this.pacienteRepository.getPacientesId(id);
+        verificaDadosPatchBody(update);
+
+        const paciente = await getPacientesId(id);
         if(paciente == null) return null;
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente)
-        return await this.pacienteMapper.updateDomain(pacienteDomain, updatePacienteDTO);
+
+        const updateDTO : UpdatePacienteDTO = this.pacienteMapper.toUpdateDTO(update);
+        return await this.pacienteMapper.updateDomain(pacienteDomain, updateDTO);
     }
 
     async delete(id: String){
@@ -54,23 +61,31 @@ export class PacienteService {
         return paciente;
     }
 
-    async addEvento(id : String, evento : Evento){
+    async addEvento(id : String, evento : any){
         verificaIdRecebido(id);
+        verificaDadosPostEventos(evento);
+        
         const paciente = await this.pacienteRepository.getPacientesId(id);
         if(paciente == null) return null;
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
-        pacienteDomain.eventos.push(evento);
-        postEventoPaciente(evento);
-        return evento;
+
+        const evnDTO = this.eventoMapper.toDTO(evento);
+        const evnDomain = await this.eventoMapper.toDomain(evnDTO);
+        pacienteDomain.eventos.push(evnDomain);
+        await postEventoPaciente(evnDomain);
+        return evnDTO;
     }
 
-    async addEvolucao(id : String, evolucao : Evolucao){
+    async addEvolucao(id : String, evolucao : any){
         verificaIdRecebido(id);
+        const evoDTO = this.eventoMapper.toDTO(evolucao);
+        const evoDomain = await this.eventoMapper.toDomain(evoDTO);
         const paciente = await this.pacienteRepository.getPacientesId(id);
         if(paciente == null) return null;
         const pacienteDomain = await this.pacienteMapper.toDomain(paciente);
-        pacienteDomain.eventos.push(evolucao);
-        return evolucao;
+        pacienteDomain.eventos.push(evoDomain);
+        await postEventoPaciente(evoDomain);
+        return evoDTO;
     }
 
     async getEventos(id : String) : Promise<Evento[] | null>{

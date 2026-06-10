@@ -10,7 +10,6 @@ import { getEvolucoesPaciente } from "../../persistence/evolucoes";
 @Injectable()
 export class EvolucaoService {
     constructor(
-        private readonly evolucaoRepository: EvolucaoRepository,
         private readonly evolucaoMapper: EvolucaoMapper
     ) {}
 
@@ -18,9 +17,12 @@ export class EvolucaoService {
         return getEvolucoesPaciente(paciente);
     }
 
-    async create(evolucaoDTO : EvolucaoDTO) : Promise<Evolucao | null>{
-        const evolucao = await this.evolucaoMapper.toDomain(evolucaoDTO);
-        return await this.evolucaoRepository.postEvolucaoPaciente(evolucao);
-    }
+    async create(idPaciente : String, evolucao : any) : Promise<Evolucao>{
+            evolucao.pacienteId = Number(idPaciente);
+            const evoDTO = this.evolucaoMapper.toDTO(evolucao);
+            const evoDomain = await this.evolucaoMapper.toDomain(evoDTO);
+        
+            return evoDomain;
+        }
 
 }

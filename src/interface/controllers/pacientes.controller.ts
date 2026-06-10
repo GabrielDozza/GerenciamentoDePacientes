@@ -7,6 +7,8 @@ import type { EventoDTO } from "../dto/evento.dto";
 import type { EvolucaoDTO } from "../dto/evolucao.dto";
 import { EventoService } from "../../application/services/evento.service";
 import { EvolucaoService } from "../../application/services/evolucao.service";
+import verificaDadosPostEventos from "../middlewares/eventos";
+import { verificaIdRecebido } from "../middlewares/pacientes";
 
 @Controller("pacientes")
 export class PacientesController {
@@ -40,16 +42,17 @@ export class PacientesController {
 
     //POSTS
     @Post()
-    async postPaciente(@Body() body: PacienteDTO/*, @Headers("Authorization") token: String*/) {
+    async postPaciente(@Body() body: any/*, @Headers("Authorization") token: String*/) {
         //verificadorToken(token);
         const novoPaciente = await this.pacienteService.create(body);
         return novoPaciente;
     };
 
     @Patch(":id")
-    async patchPaciente(@Param("id") idRecebido: String, @Body() update: UpdatePacienteDTO, @Headers("Authorization") token: String) {
+    async patchPaciente(@Param("id") idRecebido: String, @Body() update: any, @Headers("Authorization") token: String) {
         //verificadorToken(token);
-        console.log(idRecebido);
+        verificaIdRecebido(idRecebido);
+        //console.log(idRecebido);
         const updatePaciente = await this.pacienteService.patch(idRecebido, update)
         if (updatePaciente == null){
             return null;
@@ -75,10 +78,12 @@ export class PacientesController {
     };
 
     @Post(":id/eventos")
-    async postEventoPacaiente(@Param("id") idRecebido: String, @Body() body: EventoDTO, @Headers("Authorization") token: string) {
+    async postEventoPaciente(@Param("id") idRecebido: String, @Body() body: any, @Headers("Authorization") token: string) {
         //verificadorToken(token);
-        const evento = this.eventoService.create(idRecebido, body);
-        const eventoDomain = await this.pacienteService.addEvento(idRecebido, body);
+        verificaIdRecebido(idRecebido);
+        verificaDadosPostEventos(body);
+        body.pacienteId = Number(idRecebido);
+        const evento = await this.eventoService.create(idRecebido, body);
         return evento;
     };
 
@@ -86,14 +91,16 @@ export class PacientesController {
     @Get(":id/evolucoes")
     async getEvolucoesPaciente(@Param("id") idRecebido: String, @Headers("Authorization") token: string) {
         //verificadorToken(token);
+        verificaIdRecebido(idRecebido);
 
         const evolucoes = await this.pacienteService.getEvolucoes(idRecebido);
         return evolucoes;
     };
 
     @Post(":id/evolucoes")
-    async postEvolucaoPaciente(@Param("id") idRecebido: String, @Body() body: EvolucaoDTO, @Headers("Authorization") token: string) {
+    async postEvolucaoPaciente(@Param("id") idRecebido: String, @Body() body: any, @Headers("Authorization") token: string) {
         //verificadorToken(token);
+        //verificaDadosPostEventos(idRecebido); //essa funcao não tem versao para evolucoes
 
         const evolucao = await this.pacienteService.addEvolucao(idRecebido, body);
         return evolucao;

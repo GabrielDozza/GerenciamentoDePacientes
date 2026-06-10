@@ -32,34 +32,24 @@ export class PacienteRepository implements IPacienteRepository{
         return pacienteDTO;
     };
 
-    public async getPacientesCpf(cpf: String) : Promise<PacienteDTO | null> {
-        const paciente = await getPacientesCpf(cpf);
-        if (!paciente) {
-            return null;
-        }
-        const pacienteDTO : PacienteDTO = this.pacienteMapper.toDTO(paciente);
-        return pacienteDTO;
-    };
-
-    public async postPaciente(body: any) : Promise<Paciente>{
+    public async postPaciente(body: any) : Promise<Paciente>{ //feito
         const pacienteDTO = this.pacienteMapper.toDTO(body);
         const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
+
         await postPaciente(pacienteDomain);
         return pacienteDomain;
     };
 
-    public async patchPaciente(id: String, body: any) : Promise<Paciente | null>{
+    public async patchPaciente(id: String, body: any) : Promise<Paciente>{ //feito
         const paciente = getPacientesId(id);
-        if (paciente == null){
-            return null;
-        }
-        const pacienteDTO = this.pacienteMapper.toDTO(body);
+        const pacienteDTO = this.pacienteMapper.toDTO(paciente);
         const pacienteDomain = await this.pacienteMapper.toDomain(pacienteDTO);
-        const update = this.pacienteMapper.toUpdateDTO(body);
-        const updatePacienteDomain = await this.pacienteMapper.updateDomain(pacienteDomain, update)
-        await patchPaciente(updatePacienteDomain);
 
-        return updatePacienteDomain;
+        const updateDTO = this.pacienteMapper.toUpdateDTO(body);
+        const pacienteUpdated = await this.pacienteMapper.updateDomain(pacienteDomain, updateDTO);
+        await patchPaciente(pacienteUpdated);
+
+        return pacienteUpdated;
     };
 
 }

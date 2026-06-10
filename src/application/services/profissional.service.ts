@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ProfissionalMapper } from "../mappers/profissional.mapper";
-import { ProfissionalDTO, UpdateProfissionalDTO } from "../../interface/dto/profissional.dto";
 import { ProfissionalRepository } from "../../domain/repository/profissionais.repository";
 import { Profissional } from "../../domain/models/profissional.model";
-import { deleteProfissional } from "../../persistence/profissionais";
+import { deleteProfissional, getProfissionalId } from "../../persistence/profissionais";
 import gerarSenhaHash from "../../interface/middlewares/hashPassword";
 import { verificaIdRecebido } from "../../interface/middlewares/profissionais";
 
@@ -27,20 +26,20 @@ export class ProfissionalService {
         return profissional;
     }
     
-    async create(profissionalDTO : ProfissionalDTO) : Promise<Profissional>{
-        profissionalDTO.senha = gerarSenhaHash(profissionalDTO.senha);
-        const profissional = await this.profissionalMapper.toDomain(profissionalDTO);
-        return await this.profissionalRepository.postProfissional(profissional);
+    async create(profissional : any) : Promise<Profissional>{
+        profissional.senha = gerarSenhaHash(profissional.senha);
+        const proDTO = this.profissionalMapper.toDTO(profissional);
+        const proDomain = await this.profissionalMapper.toDomain(proDTO);
+        return await this.profissionalRepository.postProfissional(proDomain);
     }
 
-    async patch(id : String, updateProfissionalDTO : UpdateProfissionalDTO){
-        verificaIdRecebido(id);
-        const profissional = await this.profissionalRepository.getProfissionalId(id);
-        if(profissional == null){
-            return null;
-        }
-        const profissionalDomain = await this.profissionalMapper.toDomain(profissional)
-        return await this.profissionalMapper.updateDomain(profissionalDomain, updateProfissionalDTO);
+    async patch(id : String, update : any){
+        const profissional = await getProfissionalId(id);
+        const proDTO = this.profissionalMapper.toDTO(profissional);
+        const proDomain = await this.profissionalMapper.toDomain(proDTO);
+
+        const updateDTO = this.profissionalMapper.toUpdateDTO(update);
+        return await this.profissionalMapper.updateDomain(proDomain, updateDTO);
     }
 
     async delete(id: String){

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { ProfissionalService } from "../../application/services/profissional.service";
-import type { ProfissionalDTO, UpdateProfissionalDTO } from "../dto/profissional.dto";
+import { verificaDadosPatchProfissionais, verificaIdRecebido } from "../middlewares/profissionais";
+import { getProfissionalId } from "../../persistence/profissionais";
 
 @Controller("profissionais")
 export class profissionaisController {
@@ -19,15 +20,17 @@ export class profissionaisController {
     };
 
     @Post()
-    async postProfissional(@Body() body: ProfissionalDTO) {
+    async postProfissional(@Body() body: any) {
         const novoProfissional = await this.profissionalService.create(body);
         return novoProfissional;
     };
 
     @Patch(":id")
-    async patchProfissional(@Param("id") idRecebido: String, @Body() body: UpdateProfissionalDTO) {
-        const profissional = await this.profissionalService.patch(idRecebido, body);
-        return profissional;
+    async patchProfissional(@Param("id") idRecebido: String, @Body() body: any) {
+        verificaIdRecebido(idRecebido);
+        verificaDadosPatchProfissionais(idRecebido);
+        const updatedPro = await this.profissionalService.patch(idRecebido, body);
+        return updatedPro;
     }
 
     @Delete(":id")

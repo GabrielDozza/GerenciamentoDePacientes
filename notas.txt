@@ -1,0 +1,9 @@
+fluxo dos posts:
+controller -> faz a validação de dados -> chama o service
+service -> chama o repository
+repository ->
+
+pacientes
+profissionais
+eventos
+evolucoes
