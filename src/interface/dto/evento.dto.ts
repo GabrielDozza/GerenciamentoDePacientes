@@ -10,16 +10,16 @@ export class EventoDTO{
     @IsString()
     titulo: string;
 
-    @IsDate()
-    data: Date;
+    @IsString()
+    data: string;
 
-    @IsDate()
-    horarioInicio: Date;
+    @IsString()
+    horarioInicio: string;
 
-    @IsDate()
-    horarioFim: Date;
+    @IsString()
+    horarioFim: string;
 
-    constructor(id: number, pacienteId: number, titulo: string, data: Date, horarioInicio: Date, horarioFim: Date){
+    constructor(id: number, pacienteId: number, titulo: string, data: string, horarioInicio: string, horarioFim: string){
         this.id = id;
         this.pacienteId = pacienteId;
         this.titulo = titulo;

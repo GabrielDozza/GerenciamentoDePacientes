@@ -6,7 +6,16 @@ import { stringify } from "querystring";
 
 async function getEvolucoesPaciente(paciente: Paciente) {
     const evolucoes = prisma.evolucao.findMany({
-        where: { pacienteId: Number(paciente.id) }
+        where: { pacienteId: Number(paciente.id) },
+        select: {
+            id:true,
+            pacienteId:true,
+            titulo: true,
+            data: true,
+            horarioInicio: true,
+            horarioFim: true,
+            descricao: true
+        }
     });
 
     return evolucoes;

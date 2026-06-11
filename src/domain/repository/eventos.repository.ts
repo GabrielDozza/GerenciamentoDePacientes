@@ -9,6 +9,7 @@ import { getPacientesId } from "../../persistence/pacientes";
 import { PacienteMapper } from "../../application/mappers/paciente.mapper";
 import { Paciente } from "../models/paciente.model";
 import { verificaIdRecebido } from "../../interface/middlewares/pacientes";
+import { stringify } from "node:querystring";
 
 
 export class EventoRepository implements IEventoRepository {
@@ -16,22 +17,17 @@ export class EventoRepository implements IEventoRepository {
         private readonly eventoMapper: EventoMapper,
     ) {}
     
-    public async getEventosPaciente(paciente : Paciente) : Promise<EventoDTO[]> {
+    public async getEventosPaciente(paciente : Paciente){
+        console.log(`getEventosPaciente from evento.repository`)
         const eventos = await getEventosPaciente(paciente);
-        let evnArray: EventoDTO[] = [];
-        for (const evn of eventos){
-            const evnResponse = this.eventoMapper.toDTO(evn);
-            evnArray.push(evnResponse);
-        }
-        return evnArray;
+        console.log(eventos)
+        return eventos;
     };
 
-    public async postEventoPaciente(body: any) : Promise<Evento> {
-        const evnDTO = this.eventoMapper.toDTO(body);
-        const evnDomain : Evento = await this.eventoMapper.toDomain(evnDTO);
-        
-        postEventoPaciente(evnDomain);
-        return evnDomain;
+    public async postEventoPaciente(body: Evento) : Promise<Evento> {
+        console.log(`postEventoPaciente from evento.repository`)
+        await postEventoPaciente(body);
+        return body;
     };
 };
 

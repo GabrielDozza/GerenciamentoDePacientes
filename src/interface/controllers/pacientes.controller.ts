@@ -84,7 +84,13 @@ export class PacientesController {
         verificaIdRecebido(idRecebido);
         verificaDadosPostEventos(body);
 
-        const evento = await this.eventoService.create(idRecebido, body);
+        const dataISO = this.dataISO(body.data, body.horarioInicio, body.horarioFim);
+        console.log(dataISO);
+        body.data = dataISO[0];
+        body.horarioInicio = dataISO[1];
+        body.horarioFim = dataISO[2];
+
+        const evento = await this.pacienteService.addEvento(idRecebido, body);
         return evento;
     };
 
@@ -94,6 +100,10 @@ export class PacientesController {
         console.log(`getEvolucoesPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
+<<<<<<< HEAD
+=======
+        
+>>>>>>> b159bb0 (final eu acho)
 
         const evolucoes = await this.pacienteService.getEvolucoes(idRecebido);
         return evolucoes;
@@ -105,9 +115,26 @@ export class PacientesController {
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
         //verificaDadosPostEventos(idRecebido); //essa funcao não tem versao para evolucoes
+<<<<<<< HEAD
+=======
+        const dataISO = this.dataISO(body.data, body.horarioInicio, body.horarioFim);
+        console.log(JSON.stringify(dataISO));
+        body.data = dataISO[0];
+        body.horarioInicio = dataISO[1];
+        body.horarioFim = dataISO[2];
+>>>>>>> b159bb0 (final eu acho)
 
         const evolucao = await this.pacienteService.addEvolucao(idRecebido, body);
         return evolucao;
     };
+
+    private dataISO = (data: string, inicio: string, fim: string) : string[] => {
+        return [
+            `${data.split("/")[2]}-${data.split("/")[1]}-${data.split("/")[0]}T00:00.000Z`,
+            `${data.split("/")[2]}-${data.split("/")[1]}-${data.split("/")[0]}T${inicio.split(":")[0]}:${inicio.split(":")[1]}.000Z`,
+            `${data.split("/")[2]}-${data.split("/")[1]}-${data.split("/")[0]}T${fim.split(":")[0]}:${fim.split(":")[1]}.000Z`
+        ]
+
+    }
 
 };

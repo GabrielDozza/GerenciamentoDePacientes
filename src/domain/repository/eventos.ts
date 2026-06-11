@@ -3,6 +3,6 @@ import { Evento } from "../models/evento.model";
 import { EventoDTO } from "../../interface/dto/evento.dto";
 
 export interface IEventoRepository{
-    getEventosPaciente(paciente : Paciente) : Promise<EventoDTO[]>
+    getEventosPaciente(paciente : Paciente)
     postEventoPaciente(body: any) : Promise<Evento>;
 }

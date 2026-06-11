@@ -53,7 +53,7 @@ async function postPaciente(paciente: Paciente) {
     const novoPaciente = await prisma.paciente.create({
         data: {
             nome: paciente.nome,
-            dataNascimento: paciente.dataNascimento ?? new Date(),
+            dataNascimento: paciente.dataNascimento,
             telefone: paciente.telefone,
             email: paciente.email,
             cpf: paciente.cpf,

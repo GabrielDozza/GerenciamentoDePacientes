@@ -23,9 +23,9 @@ export class EvolucaoMapper {
             id: evolucao.id,
             pacienteId: parseInt(evolucao.pacienteId),
             titulo: evolucao.titulo,
-            data: this.stringToDate(evolucao.data),
-            horarioInicio: this.stringToDate(evolucao.data, evolucao.horarioInicio),
-            horarioFim: this.stringToDate(evolucao.data, evolucao.horarioFim),
+            data: evolucao.data,
+            horarioInicio: evolucao.horarioInicio,
+            horarioFim: evolucao.horarioFim,
             descricao: evolucao.descricao
         };
     }

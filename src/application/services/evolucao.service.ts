@@ -18,12 +18,12 @@ export class EvolucaoService {
         return this.evolucaoRepository.getEvolucoesPaciente(paciente);
     }
 
-    async create(idPaciente : String, evolucao : any) : Promise<Evolucao>{
-            evolucao.pacienteId = Number(idPaciente);
-            const evoDTO = this.evolucaoMapper.toDTO(evolucao);
-            const evoDomain = await this.evolucaoMapper.toDomain(evoDTO);
-        
-            return evoDomain;
-        }
+    async post(idPaciente : String, evolucao : any) : Promise<Evolucao>{
+        evolucao.pacienteId = Number(idPaciente);
+        const evoDTO = this.evolucaoMapper.toDTO(evolucao);
+        const evoDomain = await this.evolucaoMapper.toDomain(evoDTO);
+        const evo = await this.evolucaoRepository.postEvolucaoPaciente(evoDomain);
+        return evo;
+    }
 
 }

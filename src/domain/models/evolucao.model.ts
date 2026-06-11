@@ -2,12 +2,12 @@ export class Evolucao {
     id: number;
     pacienteId: number;
     titulo: string;
-    data: Date;
-    horarioInicio: Date;
-    horarioFim: Date;
+    data: string;
+    horarioInicio: string;
+    horarioFim: string;
     descricao: string;
 
-    constructor(id: number, pacienteId: number, titulo: string, data: Date, horarioInicio: Date, horarioFim: Date, descricao: string) {
+    constructor(id: number, pacienteId: number, titulo: string, data: string, horarioInicio: string, horarioFim: string, descricao: string) {
         this.id = id;
         this.pacienteId = pacienteId;
         this.titulo = titulo;

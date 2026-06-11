@@ -13,9 +13,9 @@ function verificaDadosPostEventos(body: any) {
         throw new BadRequestException({ message: "Digite uma data" });
     }
 
-    if (isNaN(Date.parse(body.data))) {
-        throw new BadRequestException({ message: "Data inválida" });
-    }
+    //if (isNaN(Date.parse(body.data.replaceAll("/", "-")))) {
+    //    throw new BadRequestException({ message: "Data inválida" });
+    //}
 
     if (body.horarioInicio === undefined) {
         throw new BadRequestException({ message: "Digite um horário de início" });
