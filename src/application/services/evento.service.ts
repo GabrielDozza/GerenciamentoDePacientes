@@ -15,15 +15,21 @@ export class EventoService {
     ) {}
 
     async getByPaciente(paciente : Paciente){
+        console.log(`getByPaciente from evento.service`)
         return this.eventoRepository.getEventosPaciente(paciente);
     }
 
-    async create(idPaciente : String, evento : any) : Promise<Evento>{
+    async post(idPaciente : String, evento : any) : Promise<Evento>{
+        console.log(`post from evento.service`)
+        console.log(idPaciente+" "+JSON.stringify(evento))
         evento.pacienteId = Number(idPaciente);
         const evnDTO = this.eventoMapper.toDTO(evento);
+        console.log("DTO: "+JSON.stringify(evnDTO))
         const evnDomain = await this.eventoMapper.toDomain(evnDTO);
-    
-        return evnDomain;
+        console.log("Domain: "+JSON.stringify(evnDomain))
+        const evn = await this.eventoRepository.postEventoPaciente(evnDomain);
+        console.log("post: "+JSON.stringify(evn))
+        return evn;
     }
     
 }

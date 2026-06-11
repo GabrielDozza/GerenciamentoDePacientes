@@ -100,10 +100,7 @@ export class PacientesController {
         console.log(`getEvolucoesPaciente from pacientes.controller`)
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
-<<<<<<< HEAD
-=======
         
->>>>>>> b159bb0 (final eu acho)
 
         const evolucoes = await this.pacienteService.getEvolucoes(idRecebido);
         return evolucoes;
@@ -115,14 +112,11 @@ export class PacientesController {
         //verificadorToken(token);
         verificaIdRecebido(idRecebido);
         //verificaDadosPostEventos(idRecebido); //essa funcao não tem versao para evolucoes
-<<<<<<< HEAD
-=======
         const dataISO = this.dataISO(body.data, body.horarioInicio, body.horarioFim);
         console.log(JSON.stringify(dataISO));
         body.data = dataISO[0];
         body.horarioInicio = dataISO[1];
         body.horarioFim = dataISO[2];
->>>>>>> b159bb0 (final eu acho)
 
         const evolucao = await this.pacienteService.addEvolucao(idRecebido, body);
         return evolucao;

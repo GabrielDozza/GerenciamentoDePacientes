@@ -1,27 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { PacienteMapper } from "../mappers/paciente.mapper";
-import { PacienteDTO, UpdatePacienteDTO } from "../../interface/dto/paciente.dto";
 import { PacienteRepository } from "../../domain/repository/pacientes.repository";
 import { Paciente } from "../../domain/models/paciente.model";
-import { Evento } from "../../domain/models/evento.model";
-import { Evolucao } from "../../domain/models/evolucao.model";
 import { deletePaciente, getPacientesId } from "../../persistence/pacientes";
 import { verificaDadosPatchBody, verificaDadosPostBody, verificaIdRecebido } from "../../interface/middlewares/pacientes";
-import { deletePaciente, getPacientesId } from "../../persistence/pacientes";
-import { verificaDadosPatchBody, verificaDadosPostBody, verificaIdRecebido } from "../../interface/middlewares/pacientes";
-import { postEventoPaciente } from "../../persistence/eventos";
-import { postEvolucaoPaciente } from "../../persistence/evolucoes";
-import { EventoMapper } from "../mappers/evento.mapper";
-import verificaDadosPostEventos from "../../interface/middlewares/eventos";
 import { EventoService } from "./evento.service";
-import { PacientesController } from "../../interface/controllers/pacientes.controller";
 import { EvolucaoService } from "./evolucao.service";
-import { EventoMapper } from "../mappers/evento.mapper";
-import verificaDadosPostEventos from "../../interface/middlewares/eventos";
-import { EventoService } from "./evento.service";
-import { PacientesController } from "../../interface/controllers/pacientes.controller";
-import { EvolucaoService } from "./evolucao.service";
-
 
 
 @Injectable()

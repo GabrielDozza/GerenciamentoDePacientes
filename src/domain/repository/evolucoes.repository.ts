@@ -21,10 +21,7 @@ export class EvolucaoRepository implements IEvolucaoRepository {
     };
 
     public async postEvolucaoPaciente(body: any) : Promise<Evolucao> {
-        const evoDTO = this.evolucaoMapper.toDTO(body);
-        const evoDomain = await this.evolucaoMapper.toDomain(evoDTO);
-        
-        postEvolucaoPaciente(evoDomain)
-        return evoDomain;
+        postEvolucaoPaciente(body)
+        return body;
     };
 };
