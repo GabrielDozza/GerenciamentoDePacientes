@@ -42,12 +42,6 @@ function verificaDadosPathBody(body: any) {
     if (typeof body.nome !== "string")
         throw new BadRequestException({ message: "Nome precisa ser uma string" });
 
-    if (body.dataNascimento === undefined)
-        throw new BadRequestException({ message: "Digite uma data de nascimento" });
-
-    if (typeof body.dataNascimento !== "string")
-        throw new BadRequestException({ message: "Data de nascimento precisa ser uma string" });
-
     if (body.telefone !== undefined && typeof body.telefone !== "string")
         throw new BadRequestException({ message: "Telefone precisa ser uma string" });
 

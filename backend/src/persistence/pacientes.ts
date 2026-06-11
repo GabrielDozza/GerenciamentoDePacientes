@@ -59,7 +59,8 @@ async function postPaciente(body: any) {
 };
 
 async function patchPaciente(id: String, body: any) {
-    body.dataNascimento = new Date(body.dataNascimento);
+    if(body.dataNascimento !== undefined) {body.dataNascimento = new Date(body.dataNascimento)};
+    
     const paciente = await prisma.paciente.update({
         where: {
             id: Number(id)

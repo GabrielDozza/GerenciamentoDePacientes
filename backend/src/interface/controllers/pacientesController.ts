@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Headers, Param, Patch, Post } from "@nes
 import { deletePacienteId, getPacientes, getPacientesCpf, getPacientesId, getPacientesNome, patchPaciente, postPaciente } from "../../persistence/pacientes";
 import { verificaDadosPathBody, verificaDadosPostBody, verificaIdReceibo } from "../middlewares/pacientes";
 import { getEventosPaciente, postEventoPaciente } from "../../persistence/eventos";
-import { getEvolucoesPaciente, postEvolucaoPaciente } from "../../persistence/evolucoes";
+import { deleteEvolucaoPaciente, getEvolucoesPaciente, postEvolucaoPaciente } from "../../persistence/evolucoes";
 import { verificadorToken } from "../middlewares/tokenJwt";
 
 @Controller("pacientes")
@@ -105,6 +105,15 @@ export class pacientesController {
         verificadorToken(token);
 
         const evolucao = await postEvolucaoPaciente(idRecebido, body);
+        return evolucao;
+    };
+
+    @Delete(":id/evolucoes")
+    async deleteEvolucaoPaciente(@Param("id") idRecebido: string, @Headers("Authorization") token: string) {
+        verificaIdReceibo(idRecebido);
+        verificadorToken(token);
+
+        const evolucao = await deleteEvolucaoPaciente(idRecebido);
         return evolucao;
     };
 };
